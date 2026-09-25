@@ -247,7 +247,7 @@ async function ensurePremiumAccessOrRedirect() {
   return new Promise((resolve) => {
     auth.onAuthStateChanged(async (user) => {
       if (!user) {
-        showSimpleDialog('Please sign in to use AI Insights. Free users get 2 AI uses; Premium unlocks unlimited.', {
+        showSimpleDialog('Please sign in to use AI Insights. Free users get 2 AI uses; Premium unlocks unlimited use.', {
           buttons: [
             { text: 'Sign in', class: 'btn primary', onClick: () => { window.location.href = 'login.html'; } },
             { text: 'Back', class: 'btn', onClick: () => { window.location.href = 'home.html'; } }
@@ -255,21 +255,28 @@ async function ensurePremiumAccessOrRedirect() {
         });
         return resolve(false);
       }
+
       try {
         const doc = await db.collection('users').doc(user.uid).get().catch(() => null);
         const data = doc && doc.exists ? doc.data() : {};
-        if (!data || !data.isPremium) {
-          showSimpleDialog('You've used your free AI insights. Upgrade to MyJournal+ Premium for unlimited AI.', {
-            buttons: [
-              { text: 'Upgrade', class: 'btn primary', onClick: () => { window.location.href = 'confirm.html'; } },
-              { text: 'Back', class: 'btn', onClick: () => { window.location.href = 'home.html'; } }
-            ]
-          });
-          return resolve(false);
+        const used = Number(data.aiFreeUsedCount || 0);
+
+        // Free users are allowed their first two requests. The backend is
+        // authoritative and will enforce the same limit.
+        if (data.isPremium || used < 2) {
+          return resolve(true);
         }
-        resolve(true);
+
+        showSimpleDialog('You have used your 2 free AI insights. Upgrade to MyJournal+ Premium for unlimited AI.', {
+          buttons: [
+            { text: 'Upgrade', class: 'btn primary', onClick: () => { window.location.href = 'confirm.html'; } },
+            { text: 'Back', class: 'btn', onClick: () => { window.location.href = 'home.html'; } }
+          ]
+        });
+        resolve(false);
       } catch (e) {
-        console.error('premium check error', e);
+        console.error('AI access check error:', e);
+        showError('Unable to verify AI access. Please refresh and try again.');
         resolve(false);
       }
     });
@@ -320,69 +327,60 @@ async function callGemini(systemPrompt) {
 async function sendMessage(presetText) {
   const text = (presetText != null ? String(presetText) : (userInput && userInput.value) || '').trim();
   if (!text) return;
+
   if (userInput) {
     userInput.value = '';
     userInput.style.height = 'auto';
   }
+
   addMessage(text, 'user');
   addTypingIndicator();
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    const recentTurns = chatHistory.slice(-8).map(m =>
-      (m.role === 'user' ? 'User: ' : 'Assistant: ') + m.text
-    ).join('\n');
-    const systemPrompt = conversationContext +
-      (recentTurns ? '\nRecent conversation:\n' + recentTurns + '\n' : '') +
-      '\nUser question: ' + text + '\n\nProvide a warm, supportive response (concise).';
-
-    let responseText = '';
-
-    if (BACKEND_AI_INSIGHTS_URL && auth.currentUser) {
-      const idToken = await auth.currentUser.getIdToken();
-      const res = await fetch(BACKEND_AI_INSIGHTS_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + idToken
-        },
-        body: JSON.stringify({ prompt: systemPrompt, maxTokens: 600 })
-      });
-      if (!res.ok) {
-        const textResp = await res.text();
-        removeTypingIndicator();
-        showError('AI backend error: ' + res.status + ' ' + textResp.slice(0, 120));
-        return;
-      }
-      const json = await res.json();
-      responseText = json.text || json.response || 'Sorry, I could not generate a response.';
-    } else if (LOCAL_AI_API_KEY) {
-      if (LOCAL_AI_PROVIDER === 'gemini') {
-        responseText = await callGemini(systemPrompt);
-      } else {
-        const res = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + LOCAL_AI_API_KEY
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [{ role: 'user', content: systemPrompt }],
-            max_tokens: 600
-          })
-        });
-        if (!res.ok) {
-          removeTypingIndicator();
-          showError('OpenAI API error: ' + res.status);
-          return;
-        }
-        const json = await res.json();
-        responseText = (json.choices && json.choices[0] && json.choices[0].message.content) || 'No response';
-      }
-    } else {
+    if (!auth.currentUser) {
       removeTypingIndicator();
-      showError('AI not configured. Ask an admin to set a Gemini API key, or run: localStorage.setItem("mj_gemini_key","YOUR_KEY") then reload.');
+      showError('Please sign in again before sending an AI message.');
+      return;
+    }
+
+    const idToken = await auth.currentUser.getIdToken(true);
+    const res = await fetch(BACKEND_AI_INSIGHTS_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + idToken
+      },
+      body: JSON.stringify({
+        question: text,
+        chatId: ''
+      })
+    });
+
+    const json = await res.json().catch(() => ({}));
+
+    if (res.status === 402 && json.code === 'FREE_LIMIT_REACHED') {
+      removeTypingIndicator();
+      showSimpleDialog(json.message || 'Your 2 free AI uses are finished. Upgrade to Premium for unlimited AI.', {
+        buttons: [
+          { text: 'Upgrade', class: 'btn primary', onClick: () => { window.location.href = 'confirm.html'; } },
+          { text: 'Close', class: 'btn', onClick: () => {} }
+        ]
+      });
+      return;
+    }
+
+    if (!res.ok) {
+      removeTypingIndicator();
+      console.error('AI backend response:', json);
+      showError(json.error || ('AI backend error: ' + res.status));
+      return;
+    }
+
+    const responseText = json.answer || json.text || json.response || '';
+    if (!responseText) {
+      removeTypingIndicator();
+      showError('The AI server returned an empty response. Please try again.');
       return;
     }
 

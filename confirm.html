@@ -3245,25 +3245,62 @@ Thank you!
     });
   });
 
-  // Helper: get Firebase ID token
-  async function getIdToken() {
-    if (typeof firebase === 'undefined' || !firebase.auth) return null;
-    const u = firebase.auth().currentUser;
-    if (!u) return null;
-    return u.getIdToken(true);
+  // Payment helpers. Firebase scripts are loaded later in this document,
+  // so wait until Firebase Auth has been initialized before reading the ID token.
+  async function waitForFirebaseAuth(timeoutMs = 10000) {
+    const started = Date.now();
+    while ((!window.firebase || !firebase.auth) && Date.now() - started < timeoutMs) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    if (!window.firebase || !firebase.auth) return null;
+    return firebase.auth();
   }
 
-  // Start PayChangu payment
-  
-  // Start PayPal payment for selected plan
+  async function getIdToken() {
+    const authInstance = await waitForFirebaseAuth();
+    if (!authInstance) return null;
+
+    const current = authInstance.currentUser;
+    if (current) return current.getIdToken(true);
+
+    return new Promise(resolve => {
+      let done = false;
+      const unsubscribe = authInstance.onAuthStateChanged(async user => {
+        if (done) return;
+        done = true;
+        unsubscribe();
+        try {
+          resolve(user ? await user.getIdToken(true) : null);
+        } catch (e) {
+          resolve(null);
+        }
+      });
+      setTimeout(() => {
+        if (!done) {
+          done = true;
+          try { unsubscribe(); } catch (_) {}
+          resolve(null);
+        }
+      }, 10000);
+    });
+  }
+
+  function selectedPlan() {
+    return (document.getElementById('selected-plan') || {}).value || 'lifetime';
+  }
+
+  // PayPal uses the browser approval flow. The backend creates the order,
+  // PayPal redirects the buyer back with ?token=ORDER_ID, and we capture
+  // that order server-side after the buyer approves it.
   window.startPayPalPayment = async function() {
-    const plan = (document.getElementById('selected-plan') || {}).value || 'lifetime';
+    const plan = selectedPlan();
     const token = await getIdToken();
     if (!token) {
       alert('Please sign in first to upgrade.');
       window.location.href = 'login.html';
       return;
     }
+
     try {
       const res = await fetch('https://myjournalplus.freedev.app/api/payments/paypal-create-order', {
         method: 'POST',
@@ -3273,79 +3310,74 @@ Thank you!
         },
         body: JSON.stringify({ plan })
       });
-      const data = await res.json();
-      if (!res.ok || !data.orderId) {
-        alert(data.error || 'Could not start PayPal payment. Check API and keys.');
-        console.error(data);
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.orderId || !data.approveUrl) {
+        console.error('PayPal create-order response:', data);
+        alert(data.error || 'Could not start PayPal payment. Please try again.');
         return;
       }
+
       sessionStorage.setItem('mj_paypal_order', data.orderId);
       sessionStorage.setItem('mj_pending_plan', plan);
-      // Load PayPal JS SDK and render buttons, or redirect via approval link if returned
-      if (data.approveUrl) {
-        window.location.href = data.approveUrl;
-        return;
-      }
-      // Fallback: show message and use capture after approval via SDK
-      alert('PayPal order created: ' + data.orderId + '. Loading PayPal...');
-      loadPayPalButtons(data.orderId);
+      window.location.assign(data.approveUrl);
     } catch (e) {
-      console.error(e);
-      alert('Network error talking to payment server. Is the API online?');
+      console.error('PayPal start error:', e);
+      alert('Network error talking to PayPal. Please try again.');
     }
   };
 
-  function loadPayPalButtons(orderId) {
-    if (window.paypal) {
-      renderPayPal(orderId);
+  async function capturePayPalReturn() {
+    const params = new URLSearchParams(window.location.search);
+    const provider = params.get('provider');
+    const paypalOrderId = params.get('token') || sessionStorage.getItem('mj_paypal_order');
+
+    // PayPal adds token=<ORDER_ID> after approval.
+    if (provider !== 'paypal' && !paypalOrderId) return;
+    if (!paypalOrderId) return;
+
+    const token = await getIdToken();
+    if (!token) {
+      alert('Please sign in to the same MyJournal+ account you used before paying.');
       return;
     }
-    const s = document.createElement('script');
-    s.src = 'https://www.paypal.com/sdk/js?client-id=AaHclfYuOztCsBadS2BJr_II0OCnj5KmzFj2uedvKMh6_W_WUxYLiKo35aq2Cry7EXuTnh3PRBbvUf8h&currency=USD';
-    s.onload = () => renderPayPal(orderId);
-    document.head.appendChild(s);
-  }
 
-  function renderPayPal(orderId) {
-    let container = document.getElementById('paypal-button-container');
-    if (!container) {
-      container = document.createElement('div');
-      container.id = 'paypal-button-container';
-      container.style.cssText = 'margin:16px auto;max-width:400px;';
-      document.querySelector('.payment-method.paypal-method')?.appendChild(container)
-        || document.querySelector('main')?.appendChild(container);
+    try {
+      const res = await fetch('https://myjournalplus.freedev.app/api/payments/paypal-capture', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ orderId: paypalOrderId })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        sessionStorage.removeItem('mj_paypal_order');
+        sessionStorage.removeItem('mj_pending_plan');
+        alert('Premium activated! Enjoy MyJournal+ Premium.');
+        window.location.replace('home.html');
+        return;
+      }
+
+      console.error('PayPal capture response:', data);
+      alert(data.error || data.message || 'PayPal payment was approved but could not be captured. Please contact support with your order ID: ' + paypalOrderId);
+    } catch (e) {
+      console.error('PayPal capture error:', e);
+      alert('We could not verify your PayPal payment yet. Please try again.');
     }
-    container.innerHTML = '';
-    paypal.Buttons({
-      createOrder: () => orderId,
-      onApprove: async (data) => {
-        const token = await getIdToken();
-        const res = await fetch('https://myjournalplus.freedev.app/api/payments/paypal-capture', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-          body: JSON.stringify({ orderId: data.orderID || orderId })
-        });
-        const result = await res.json();
-        if (result.success) {
-          alert('Premium activated! Enjoy MyJournal+ Premium.');
-          window.location.href = 'home.html';
-        } else {
-          alert(result.error || result.message || 'Capture failed');
-        }
-      },
-      onCancel: () => alert('Payment cancelled'),
-      onError: (err) => { console.error(err); alert('PayPal error'); }
-    }).render('#paypal-button-container');
   }
 
   window.startPayChanguPayment = async function() {
-    const plan = (document.getElementById('selected-plan') || {}).value || 'lifetime';
+    const plan = selectedPlan();
     const token = await getIdToken();
     if (!token) {
       alert('Please sign in first to upgrade.');
       window.location.href = 'login.html';
       return;
     }
+
     try {
       const res = await fetch('https://myjournalplus.freedev.app/api/payments/create-paychangu', {
         method: 'POST',
@@ -3355,49 +3387,71 @@ Thank you!
         },
         body: JSON.stringify({ plan })
       });
-      const data = await res.json();
-      if (!res.ok || !data.checkoutUrl) {
-        alert(data.error || 'Could not start payment. Please try again.');
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.checkoutUrl || !data.txRef) {
+        console.error('PayChangu create response:', data);
+        alert(data.error || 'Could not start PayChangu payment. Please try again.');
         return;
       }
-      // Remember txRef for verify on return
+
       sessionStorage.setItem('mj_pending_tx', data.txRef);
       sessionStorage.setItem('mj_pending_plan', plan);
-      window.location.href = data.checkoutUrl;
+      window.location.assign(data.checkoutUrl);
     } catch (e) {
-      console.error(e);
+      console.error('PayChangu start error:', e);
       alert('Network error. Please try again.');
     }
   };
 
-  // On return from PayChangu — auto verify
-  (async function() {
+  async function verifyPayChanguReturn() {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('status') === 'success') {
-      const tx = params.get('tx') || sessionStorage.getItem('mj_pending_tx');
-      if (!tx) return;
-      const token = await getIdToken();
-      if (!token) return;
-      try {
-        const res = await fetch('https://myjournalplus.freedev.app/api/payments/verify-paychangu', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify({ txRef: tx })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('Premium activated! Enjoy MyJournal+ Premium.');
-          sessionStorage.removeItem('mj_pending_tx');
-          window.location.href = 'home.html';
-        } else {
-          console.log('Verify pending', data);
-        }
-      } catch (e) { console.error(e); }
+    const tx = params.get('tx_ref') || params.get('tx') || sessionStorage.getItem('mj_pending_tx');
+    const status = (params.get('status') || '').toLowerCase();
+
+    // If PayChangu redirected back after a failed/cancelled attempt, don't
+    // attempt to activate anything.
+    if (!tx || (status && !['success', 'successful', 'completed', 'paid'].includes(status))) return;
+
+    const token = await getIdToken();
+    if (!token) return;
+
+    try {
+      const res = await fetch('https://myjournalplus.freedev.app/api/payments/verify-paychangu', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ txRef: tx })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        sessionStorage.removeItem('mj_pending_tx');
+        sessionStorage.removeItem('mj_pending_plan');
+        alert('Premium activated! Enjoy MyJournal+ Premium.');
+        window.location.replace('home.html');
+        return;
+      }
+
+      console.log('PayChangu verification pending/failed:', data);
+    } catch (e) {
+      console.error('PayChangu verify error:', e);
     }
-  })();
+  }
+
+  // Run only after the Firebase scripts below have loaded.
+  window.addEventListener('load', async () => {
+    await waitForFirebaseAuth(15000);
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('provider') === 'paypal' || params.get('token')) {
+      await capturePayPalReturn();
+    } else if (params.get('tx_ref') || params.get('tx')) {
+      await verifyPayChanguReturn();
+    }
+  });
+
 })();
 </script>
  <!-- scripts -->
