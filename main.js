@@ -280,8 +280,8 @@ function ensurePremiumModal() {
       </ul>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
         <button id="mj-premium-back" class="btn">Back</button>
-        <a href="https://www.paypal.com/ncp/payment/HCFCZ72G56G4Y id="mj-pay-paypal" class="btn primary">PayPal</a>
-        <a href="tnmmpamba" class="btn" style="text-decoration:none;text-align:center">Mpamba</a>
+       <button id="mj-pay-paypal" class="btn primary">PayPal</button>
+       <a href="tnmmpamba" class="btn" style="text-decoration:none;text-align:center">Mpamba</a>
       </div>
       <div id="mj-premium-footer" style="margin-top:12px;color:var(--text-muted);font-size:13px">You will be redirected to complete payment. Your account will upgrade automatically after verification.</div>
     </div>`;
@@ -339,8 +339,8 @@ function ensureManualVerifyModal() {
 
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
         <button id="mj-verify-cancel" class="btn">Cancel</button>
-        <a id="mj-paypal-redirect" href="https://www.paypal.com/ncp/payment/HCFCZ72G56G4Y" target="_blank" class="btn primary">Go to PayPal</a>
-      </div>
+       <button id="mj-pay-paypal" class="btn primary">PayPal</button>
+       </div>
 
       <p id="mj-verify-note" style="margin-top:10px;color:var(--text-muted);font-size:13px">After paying, return here and submit your Transaction ID for verification (usually instant).</p>
       <div id="mj-verify-result" style="margin-top:10px;"></div>
