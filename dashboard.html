@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyJournal+ | Growth Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="glass-strong login-box">
+      <h1>MyJournal+</h1>
+      <p class="subtitle">Growth &amp; User Acquisition Portal</p>
+      <div id="error" class="error-msg hidden"></div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" required placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" required placeholder="••••••••" autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%" id="loginBtn">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        await ensureUserDoc(user);
+        redirectByRole(await getUserRole(user.uid));
+      }
+    });
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById('error');
+      const btn = document.getElementById('loginBtn');
+      errEl.classList.add('hidden');
+      btn.disabled = true; btn.textContent = 'Signing in…';
+      try {
+        const cred = await auth.signInWithEmailAndPassword(
+          document.getElementById('email').value.trim(),
+          document.getElementById('password').value
+        );
+        await ensureUserDoc(cred.user);
+        redirectByRole(await getUserRole(cred.user.uid));
+      } catch (err) {
+        errEl.textContent = err.message || 'Login failed';
+        errEl.classList.remove('hidden');
+        btn.disabled = false; btn.textContent = 'Sign In';
+      }
+    });
+  </script>
+</body>
+</html>

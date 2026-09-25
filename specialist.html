@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyJournal+ | Growth Specialist</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="header glass">
+    <div class="logo">MyJournal+ Growth Specialist</div>
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <span class="text-muted text-xs" id="userName"></span>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar">
+      <button class="nav-btn active" data-tab="overview">Overview</button>
+      <button class="nav-btn" data-tab="progress">Earnings Progress</button>
+      <button class="nav-btn" data-tab="referrals">My Referrals</button>
+      <button class="nav-btn" data-tab="link">My Link</button>
+      <button class="nav-btn" data-tab="consult">Consult Admin</button>
+      <button class="nav-btn" data-tab="resources">Resources</button>
+      <button class="nav-btn" data-tab="profile">Profile</button>
+    </nav>
+
+    <main class="main">
+      <!-- OVERVIEW -->
+      <div id="tab-overview" class="tab-content space-y">
+        <div class="grid-4">
+          <div class="glass-card kpi">
+            <div class="kpi-label">Total Signups</div>
+            <div class="kpi-value" id="kpiTotal">0</div>
+            <div class="kpi-sub">via your link</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-label">7-Day Retained</div>
+            <div class="kpi-value text-emerald" id="kpiRetained">0</div>
+            <div class="kpi-sub">qualified ≥ 7 days</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-label">Verified Premium</div>
+            <div class="kpi-value text-gold" id="kpiPremium">0</div>
+            <div class="kpi-sub">premium customers</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-label">Est. Earnings</div>
+            <div class="kpi-value text-purple" id="kpiEarned">$0.00</div>
+            <div class="kpi-sub">from thresholds</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="threshold-card">
+            <div class="flex-between mb-2">
+              <strong>$2 per 50 retained</strong>
+              <span class="badge badge-purple" id="retainedBatches">0 batches</span>
+            </div>
+            <div class="progress-bar mb-2">
+              <div class="progress-fill" id="retainedBar" style="width:0%"></div>
+            </div>
+            <p class="text-xs text-muted" id="retainedHint">0 / 50 toward next $2</p>
+          </div>
+          <div class="threshold-card premium">
+            <div class="flex-between mb-2">
+              <strong>$5 per 15 premium</strong>
+              <span class="badge badge-amber" id="premiumBatches">0 batches</span>
+            </div>
+            <div class="progress-bar mb-2">
+              <div class="progress-fill" id="premiumBar" style="width:0%;background:linear-gradient(90deg,#d97706,#ec4899)"></div>
+            </div>
+            <p class="text-xs text-muted" id="premiumHint">0 / 15 toward next $5</p>
+          </div>
+        </div>
+
+        <div class="glass-card p-5">
+          <h3 class="section-title">7-Day Signup Growth</h3>
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+
+        <div class="glass-card p-5">
+          <h3 class="section-title">Payout Status</h3>
+          <div class="grid-3">
+            <div>
+              <div class="text-xs text-muted">Pending review</div>
+              <div class="kpi-value text-amber" style="font-size:1.25rem" id="payPending">$0.00</div>
+            </div>
+            <div>
+              <div class="text-xs text-muted">Approved</div>
+              <div class="kpi-value text-sky" style="font-size:1.25rem" id="payApproved">$0.00</div>
+            </div>
+            <div>
+              <div class="text-xs text-muted">Paid out</div>
+              <div class="kpi-value text-emerald" style="font-size:1.25rem" id="payPaid">$0.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROGRESS -->
+      <div id="tab-progress" class="tab-content hidden space-y">
+        <div class="glass-card p-5">
+          <h3 class="section-title">How you earn</h3>
+          <ul class="text-muted" style="padding-left:1.2rem;line-height:1.8">
+            <li><strong class="text-purple">$2</strong> for every <strong>50 qualified users</strong> who stay active / retained for <strong>7 days</strong></li>
+            <li><strong class="text-gold">$5</strong> for every <strong>15 verified Premium</strong> customers acquired through your link</li>
+          </ul>
+        </div>
+        <div class="grid-2">
+          <div class="glass-card p-5">
+            <h3 class="section-title">Retained progress</h3>
+            <p class="kpi-value text-emerald" id="progRetainedCount">0</p>
+            <p class="text-xs text-muted mb-2">qualified users retained ≥ 7 days</p>
+            <div class="progress-bar mb-2"><div class="progress-fill" id="progRetainedBar" style="width:0%"></div></div>
+            <p class="text-xs" id="progRetainedText">Need 50 more for next $2</p>
+            <p class="mt-3 text-purple" id="progRetainedEarned"><strong>$0</strong> earned from retention</p>
+          </div>
+          <div class="glass-card p-5">
+            <h3 class="section-title">Premium progress</h3>
+            <p class="kpi-value text-gold" id="progPremiumCount">0</p>
+            <p class="text-xs text-muted mb-2">verified premium customers</p>
+            <div class="progress-bar mb-2"><div class="progress-fill" id="progPremiumBar" style="width:0%;background:linear-gradient(90deg,#d97706,#ec4899)"></div></div>
+            <p class="text-xs" id="progPremiumText">Need 15 more for next $5</p>
+            <p class="mt-3 text-gold" id="progPremiumEarned"><strong>$0</strong> earned from premium</p>
+          </div>
+        </div>
+        <div class="glass-card p-5">
+          <h3 class="section-title">Commission history</h3>
+          <div id="commissionsList"></div>
+        </div>
+      </div>
+
+      <!-- REFERRALS -->
+      <div id="tab-referrals" class="tab-content hidden">
+        <div class="glass-card p-5">
+          <div class="flex-between mb-4">
+            <h3 class="section-title" style="margin:0">Referral pipeline</h3>
+            <select id="refFilter" style="max-width:10rem">
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="qualified">Qualified</option>
+              <option value="retained">Retained 7d</option>
+              <option value="premium">Premium</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Status</th>
+                  <th>Days</th>
+                  <th>Premium</th>
+                  <th>Signed up</th>
+                </tr>
+              </thead>
+              <tbody id="referralsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- LINK -->
+      <div id="tab-link" class="tab-content hidden space-y">
+        <div class="glass-card p-5">
+          <h3 class="section-title">Your acquisition link</h3>
+          <p class="text-muted text-xs mb-2">Anyone who signs up with this link is tracked automatically on your dashboard and for admins.</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <input type="text" id="refLink" readonly style="flex:1;min-width:12rem" />
+            <button class="btn btn-primary btn-sm" id="copyBtn">Copy link</button>
+          </div>
+          <p class="text-xs text-muted mt-2">Code: <span class="font-mono text-purple" id="refCode">—</span></p>
+        </div>
+        <div class="glass-card p-5">
+          <h3 class="section-title">Link performance</h3>
+          <div class="grid-3">
+            <div><div class="text-xs text-muted">Clicks (campaigns)</div><div class="kpi-value" style="font-size:1.3rem" id="linkClicks">0</div></div>
+            <div><div class="text-xs text-muted">Signups</div><div class="kpi-value" style="font-size:1.3rem" id="linkSignups">0</div></div>
+            <div><div class="text-xs text-muted">Conversion</div><div class="kpi-value text-sky" style="font-size:1.3rem" id="linkConv">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONSULT -->
+      <div id="tab-consult" class="tab-content hidden">
+        <div class="consult-box">
+          <h3 class="section-title">Consult about thresholds &amp; payouts</h3>
+          <p class="text-xs text-muted mb-3">Message the admin when you reach a threshold or have questions about payment timing.</p>
+          <div class="consult-thread" id="consultThread"></div>
+          <div style="display:flex;gap:.5rem">
+            <input type="text" id="consultInput" placeholder="e.g. I reached 50 retained — ready for review" style="flex:1" />
+            <button class="btn btn-sky btn-sm" id="consultSend">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESOURCES -->
+      <div id="tab-resources" class="tab-content hidden">
+        <div class="glass-card p-5">
+          <h3 class="section-title">Growth resources</h3>
+          <div id="resourcesList" class="grid-2"></div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="tab-profile" class="tab-content hidden">
+        <div class="glass-card p-5" style="max-width:28rem">
+          <h3 class="section-title">Profile</h3>
+          <div class="space-y text-muted">
+            <div><span class="text-xs">Display name</span><br><strong id="profName" style="color:#fff"></strong></div>
+            <div><span class="text-xs">Email</span><br><strong id="profEmail" style="color:#fff"></strong></div>
+            <div><span class="text-xs">Acquisition code</span><br><strong id="profCode" class="font-mono text-purple"></strong></div>
+            <div><span class="text-xs">Status</span><br><strong id="profStatus" style="color:#fff;text-transform:capitalize"></strong></div>
+            <div><span class="text-xs">Title</span><br><strong style="color:#fff">Growth &amp; User Acquisition Specialist</strong></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/specialist.js"></script>
+</body>
+</html>

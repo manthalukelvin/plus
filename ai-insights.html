@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MyJournal+ — AI Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+<!-- SEO Meta Tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="MyJournal+ - A calm and private journaling app for daily reflection, mood tracking, and personal growth. Free with optional premium features.">
+<meta name="keywords" content="journal, journaling app, mood tracker, personal reflection, diary, mental health, private journaling, productivity">
+<meta name="author" content="Celma Tech Foundation">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+<!-- Canonical URL (IMPORTANT - prevents duplicate content) -->
+<link rel="canonical" href="https://myjournalplus.com">
+
+<!-- Open Graph / Social Media Sharing -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myjournalplus.com">
+<meta property="og:title" content="MyJournal+ — Reflect, Track, Grow">
+<meta property="og:description" content="A calm, private journaling space for daily reflection, mood tracking, and personal growth. Perfect for students and young professionals.">
+<meta property="og:image" content="https://myjournalplus.com/logo.png">
+<meta property="og:site_name" content="MyJournal+">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://myjournalplus.com">
+<meta name="twitter:title" content="MyJournal+ — Private Journaling App">
+<meta name="twitter:description" content="Your personal productivity companion for reflection, mood tracking, and growth.">
+<meta name="twitter:image" content="https://myjournalplus.com/logo.png">
+<meta name="twitter:creator" content="@CelmaTech">
+
+<!-- Mobile App Meta Tags -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MyJournal+">
+<meta name="theme-color" content="#7b6cff">
+
+<!-- PWA Manifest -->
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="shortcut icon" href="logo.png">
+
+<!-- Google Site Verification (if you have it) -->
+<meta name="google-site-verification" content="jb0wFC5mJ_tGoxbxcw6LlrYfwIC7tRzDNaj4ddNo83Q">
+
+
+<!-- ===== FAVICON & ICONS ===== -->
+
+<!-- Primary Favicon (SVG - Modern browsers) -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260525" />
+
+<!-- PNG Fallback (96x96 - Good for most uses) -->
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=20260525" />
+
+<!-- Legacy ICO Fallback (Very old browsers) -->
+<link rel="shortcut icon" href="/favicon.ico?v=20260525" />
+
+<!-- Apple iOS Home Screen -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20260525" />
+<meta name="apple-mobile-web-app-title" content="MyJournal+" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!-- PWA Manifest -->
+
+<!-- Theme Color (Browser Address Bar) -->
+<meta name="theme-color" content="#7b6cff" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PCCRP91YV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7PCCRP91YV');
+  </script>
+
+  <script src="/lock-check.js" defer></script>
+
+  <style>
+    /* AI Page Specific Styles */
+    .ai-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .ai-chat {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      min-height: 500px;
+      max-height: 600px;
+      overflow-y: auto;
+      padding: 16px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message.assistant {
+      justify-content: flex-start;
+    }
+
+    .message-content {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .message.user .message-content {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #041025;
+      font-weight: 600;
+    }
+
+    .message.assistant .message-content {
+      background: rgba(255,255,255,0.06);
+      color: var(--text-main);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .message.system .message-content {
+      background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      color: var(--text-muted);
+      font-size: 13px;
+      text-align: center;
+      width: 100%;
+      max-width: 100%;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 12px 16px;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      animation: typingBounce 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.7; }
+      30% { transform: translateY(-10px); opacity: 1; }
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .input-area textarea {
+      flex: 1;
+      min-height: 50px;
+      max-height: 120px;
+      padding: 12px 14px;
+      resize: vertical;
+    }
+
+    .input-area button {
+      padding: 10px 16px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ai-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ai-card {
+      padding: 16px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ai-card h4 {
+      margin: 0;
+      color: var(--accent-2);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .ai-card p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .quick-prompts {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quick-btn {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 12px;
+      text-align: left;
+      transition: all 0.2s;
+      font-weight: 600;
+    }
+
+    .quick-btn:hover {
+      background: linear-gradient(90deg, rgba(124,92,255,0.08), rgba(68,217,255,0.03));
+      color: var(--accent-2);
+      transform: translateX(4px);
+    }
+
+    .faq-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .faq-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .faq-item:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(124,92,255,0.2);
+    }
+
+    .faq-item strong {
+      color: var(--accent-2);
+      font-size: 12px;
+    }
+
+    .faq-item p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .ai-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-box {
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      text-align: center;
+    }
+
+    .stat-box .value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent-2);
+    }
+
+    .stat-box .label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .insights-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #041025;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: var(--accent-2);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      background: linear-gradient(90deg, rgba(255,107,107,0.1), rgba(255,138,107,0.08));
+      border: 1px solid rgba(255,107,107,0.2);
+      color: #ffb3b3;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .success-message {
+      background: linear-gradient(90deg, rgba(61,220,151,0.1), rgba(61,220,151,0.08));
+      border: 1px solid rgba(61,220,151,0.2);
+      color: #a7f3d0;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    /* Clear chat button */
+    .clear-chat-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,107,107,0.2);
+      background: rgba(255,107,107,0.08);
+      color: #ffb3b3;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .clear-chat-btn:hover {
+      background: rgba(255,107,107,0.12);
+      border-color: rgba(255,107,107,0.3);
+    }
+
+    @media (max-width: 960px) {
+      .ai-container {
+        grid-template-columns: 1fr;
+      }
+      .ai-sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .message-content {
+        max-width: 100%;
+      }
+      .chat-messages {
+        min-height: 300px;
+        max-height: 400px;
+      }
+    }
+  
+    /* Enhanced AI Insights UI */
+    .ai-page-hero {
+      padding: 20px 18px 8px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .ai-page-hero h1 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      margin: 0 0 6px;
+      background: linear-gradient(90deg, #c4b5fd, #4dd3ff, #f9a8d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .ai-page-hero p { color: var(--muted, rgba(255,255,255,.55)); margin: 0; font-size: .95rem; }
+    .ai-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
+      padding: 12px 18px 28px;
+    }
+    @media (max-width: 900px) {
+      .ai-container { grid-template-columns: 1fr; }
+    }
+    .ai-chat {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 560px;
+      background: linear-gradient(165deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.25);
+    }
+    .chat-messages {
+      flex: 1;
+      min-height: 420px;
+      max-height: min(62vh, 640px);
+      overflow-y: auto;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scrollbar-width: thin;
+    }
+    .message { display: flex; gap: 10px; animation: slideIn 0.28s ease; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .message.user { justify-content: flex-end; }
+    .message.assistant, .message.system { justify-content: flex-start; }
+    .message-content {
+      max-width: 82%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      line-height: 1.55;
+      word-wrap: break-word;
+      font-size: 0.95rem;
+    }
+    .message.user .message-content {
+      background: linear-gradient(135deg, #7b6cff, #4dd3ff);
+      color: #041025;
+      font-weight: 600;
+      border-bottom-right-radius: 4px;
+    }
+    .message.assistant .message-content {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-main, #f1f0f7);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-bottom-left-radius: 4px;
+    }
+    .message.system .message-content {
+      background: rgba(123,108,255,0.12);
+      border: 1px solid rgba(123,108,255,0.25);
+      color: #e0e7ff;
+      max-width: 100%;
+    }
+    .input-area, .chat-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      padding-top: 4px;
+    }
+    .input-area textarea, .chat-input-row textarea {
+      flex: 1;
+      min-height: 48px;
+      max-height: 120px;
+      resize: none;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.25);
+      color: #fff;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .input-area textarea:focus, .chat-input-row textarea:focus {
+      border-color: rgba(123,108,255,0.6);
+      box-shadow: 0 0 0 3px rgba(123,108,255,0.2);
+    }
+    .input-area #sendBtn, .chat-input-row #sendBtn {
+      height: 48px;
+      min-width: 48px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #7b6cff, #4dd3ff);
+      color: #041025;
+      font-weight: 700;
+      padding: 0 16px;
+      transition: transform .15s, opacity .15s;
+    }
+    .input-area #sendBtn:hover, .chat-input-row #sendBtn:hover { transform: translateY(-1px); }
+    .input-area #sendBtn:disabled, .chat-input-row #sendBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .typing-indicator { display: flex; gap: 5px; padding: 8px 4px; }
+    .typing-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #a5b4fc;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(2) { animation-delay: .15s; }
+    .typing-dot:nth-child(3) { animation-delay: .3s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: .4; }
+      40% { transform: translateY(-6px); opacity: 1; }
+    }
+    .error-message, .success-message {
+      padding: 10px 14px; border-radius: 10px; font-size: .9rem;
+    }
+    .error-message { background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+    .success-message { background: rgba(16,185,129,.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,.25); }
+    .ai-sidebar {
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .ai-stat-card, .ai-side-card {
+      background: linear-gradient(165deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .ai-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .ai-stat-grid .kpi { text-align: center; padding: 12px 8px; border-radius: 12px; background: rgba(0,0,0,.2); }
+    .ai-stat-grid .kpi strong { display: block; font-size: 1.4rem; color: #c4b5fd; }
+    .ai-stat-grid .kpi span { font-size: .75rem; color: rgba(255,255,255,.5); }
+    .faq-item {
+      cursor: pointer;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid transparent;
+      transition: background .15s, border-color .15s;
+    }
+    .faq-item:hover {
+      background: rgba(123,108,255,0.12);
+      border-color: rgba(123,108,255,0.3);
+    }
+    .faq-item strong { display: block; font-size: .88rem; margin-bottom: 2px; }
+    .faq-item p { margin: 0; font-size: .78rem; color: rgba(255,255,255,.45); }
+    .clear-chat-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(239,68,68,0.12);
+      color: #fca5a5;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background .15s;
+    }
+    .clear-chat-btn:hover { background: rgba(239,68,68,0.22); }
+
+  </style>
+<script>
+(function(){try{var g=localStorage.getItem('mj_theme_active');if(!g)return;var p=JSON.parse(g);var t=p.theme||'default',b=p.bgStyle||'gradient';
+document.documentElement.dataset.mjTheme=t;document.documentElement.dataset.mjBg=b;
+var css='body.theme-ready{}';
+// apply classes as soon as body exists
+function apply(){var body=document.body;if(!body)return;['theme-midnight','theme-sunset','theme-forest','theme-rose','theme-ocean','theme-aurora','theme-ember','theme-lavender','theme-slate','bg-style-gradient','bg-style-mesh','bg-style-solid','bg-style-waves','bg-style-noir'].forEach(function(c){body.classList.remove(c)});if(t&&t!=='default')body.classList.add('theme-'+t);body.classList.add('bg-style-'+b);}
+if(document.body)apply();else document.addEventListener('DOMContentLoaded',apply);
+}catch(e){}})();
+</script>
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#7b6cff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body class="page-ai">
+  <header class="app-header glass">
+    <div class="header-left">
+      <h1 class="logo-title small">MyJournal+</h1>
+      <p class="site-desc small">AI-Powered MyJournal+ Assistant — Analyze, Reflect, Grow</p>
+    </div>
+    <div class="header-right">
+      <a href="home" class="btn">Home</a>
+    </div>
+  </header>
+<div class="insights-badge">
+        </div>
+  <main class="app-main" style="max-width:1400px;margin:0 auto;padding:0">
+    <div class="ai-container">
+      <!-- Main Chat Area -->
+      <div class="ai-chat">
+        <div class="welcome glass" style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          <div>
+            <h2 style="margin:0">MyJournal+ AI Assistant</h2>
+            <p class="sub" style="margin:4px 0">Chat with AI about your entries, moods, and get personalized insights</p>
+          </div>
+          <div class="insights-badge">
+            <span>🤖</span>
+            <span>Powered by MyJournal+</span>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages" role="log" aria-label="Chat messages">
+          <div class="message system">
+            <div class="message-content">
+              👋 Welcome to your AI MyJournal+ Assistant! I'm here to help you analyze your entries, understand your moods, and provide personalized insights for your mental wellbeing.
+            </div>
+          </div>
+        </div>
+
+        <div class="input-area chat-input-row">
+          <textarea id="userInput" placeholder="Ask me anything about your entries, moods, or wellbeing... (Enter to send, Shift+Enter for new line)" aria-label="Message input"></textarea>
+          <button id="sendBtn" class="btn primary" title="Send message" aria-label="Send message">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="ai-sidebar">
+        <!-- Quick Stats -->
+        <div class="ai-card">
+          <h4>📊 Your Journal Summary</h4>
+          <div class="ai-stats">
+            <div class="stat-box">
+              <div class="value" id="totalEntries">0</div>
+              <div class="label">Entries</div>
+            </div>
+            <div class="stat-box">
+              <div class="value" id="totalMoods">0</div>
+              <div class="label">Moods Logged</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Prompts -->
+        <div class="ai-card">
+          <h4>⚡ Quick Prompts</h4>
+          <div class="quick-prompts">
+            <button class="quick-btn" data-prompt="Analyze my entries and identify the main themes or recurring topics I write about.">📍 Find My Themes</button>
+            <button class="quick-btn" data-prompt="Based on my mood logs, what patterns do you notice? Any suggestions?">📈 Analyze My Moods</button>
+            <button class="quick-btn" data-prompt="What are some practical suggestions to improve my wellbeing based on my entries?">💡 Suggestions</button>
+            <button class="quick-btn" data-prompt="Write me a supportive message based on my recent entries.">💌 Encouragement</button>
+            <button class="quick-btn" data-prompt="What are the main factors affecting my mental health based on my journal?">🎯 Key Factors</button>
+          </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="ai-card">
+          <h4>❓ Common Questions</h4>
+          <div class="faq-section">
+            <div class="faq-item" data-faq="How can journaling help my mental health?">
+              <strong>Q: Benefits of journaling?</strong>
+              <p>Click to learn more</p>
+            </div>
+            <div class="faq-item" data-faq="What should I do if I'm feeling overwhelmed?">
+              <strong>Q: Feeling overwhelmed?</strong>
+              <p>Click to learn more</p>
+            </div>
+            <div class="faq-item" data-faq="How do I identify my mood triggers?">
+              <strong>Q: Mood triggers?</strong>
+              <p>Click to learn more</p>
+            </div>
+            <div class="faq-item" data-faq="What are some daily practices for better mental health?">
+              <strong>Q: Daily practices?</strong>
+              <p>Click to learn more</p>
+            </div>
+            <div class="faq-item" data-faq="How can I track progress in my mental health journey?">
+              <strong>Q: Track progress?</strong>
+              <p>Click to learn more</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clear Chat -->
+        <button class="clear-chat-btn" id="clearChatBtn">🗑️ Clear Chat History</button>
+      </aside>
+    </div>
+  </main>
+
+  <footer style="width:95%;display:inline;justify-content:space-between;text-align:center;align-items:center;margin-top:10px">
+      <div><a href="about" class="tiny-link">About</a> · <a href="terms" class="tiny-link">Terms</a> · <a href="privacy" class="tiny-link">Privacy</a> </br> <a href="https://www.appcreator24.com/app3925490-pv2y17">Download Android App </a> </div> 
+      <div class="app-footer">Celma - 2026</div>
+    </footer>
+
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+
+
+<!-- Add this before your ai.js script -->
+<script type="importmap">
+  {
+    "imports": {
+      "@google/generative-ai": "https://esm.run/@google/generative-ai"
+    }
+  }
+</script>
+
+  <!-- Gemini API SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.3.0/dist/index.min.js"></script>
+
+  <!-- AI Page Script -->
+  <script src="ai-insights.js"></script>
+<script src="pwa-install.js"></script>
+</body>
+</html>

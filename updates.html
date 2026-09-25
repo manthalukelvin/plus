@@ -1,0 +1,1257 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta
+name="description"
+content="Download the latest version of MyJournal+ and access previous releases, updates, improvements and security fixes."
+
+«»
+
+  <meta name="theme-color" content="#6d5dfc">  <title>MyJournal+ — Downloads & Updates</title>  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #6d5dfc;
+      --primary-dark: #5848e8;
+      --secondary: #8b5cf6;
+
+      --text: #172033;
+      --muted: #667085;
+
+      --background: #f6f7fb;
+      --card: rgba(255,255,255,.82);
+      --border: rgba(15,23,42,.08);
+
+      --success: #16a34a;
+      --warning: #f59e0b;
+
+      --shadow:
+        0 20px 60px rgba(31,41,55,.10);
+
+      --radius: 24px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #f1f5f9;
+        --muted: #a8b0c0;
+
+        --background: #0b1020;
+        --card: rgba(20,27,45,.82);
+        --border: rgba(255,255,255,.08);
+
+        --shadow:
+          0 20px 60px rgba(0,0,0,.35);
+      }
+    }
+
+    body {
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 10% 0%,
+          rgba(109,93,252,.15),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 90% 20%,
+          rgba(139,92,246,.12),
+          transparent 30%
+        ),
+        var(--background);
+
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: auto;
+    }
+
+    /* ================= HEADER ================= */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      background: rgba(255,255,255,.65);
+      border-bottom: 1px solid var(--border);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      header {
+        background: rgba(11,16,32,.72);
+      }
+    }
+
+    .nav {
+      min-height: 72px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      text-decoration: none;
+      font-weight: 850;
+      font-size: 20px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 13px;
+
+      color: white;
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--secondary)
+        );
+
+      box-shadow:
+        0 8px 20px rgba(109,93,252,.28);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    @media (max-width: 650px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    /* ================= HERO ================= */
+
+    .hero {
+      padding: 75px 0 45px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 7px 13px;
+
+      border: 1px solid rgba(109,93,252,.18);
+      border-radius: 999px;
+
+      background: rgba(109,93,252,.08);
+
+      color: var(--primary);
+
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .hero h1 {
+      margin-top: 20px;
+
+      font-size: clamp(38px, 7vw, 70px);
+      line-height: 1.03;
+      letter-spacing: -2.5px;
+
+      font-weight: 900;
+    }
+
+    .gradient-text {
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--secondary)
+        );
+
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 20px auto 0;
+
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    /* ================= LATEST CARD ================= */
+
+    .latest {
+      position: relative;
+
+      padding: 32px;
+
+      border-radius: 30px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(109,93,252,.95),
+          rgba(139,92,246,.92)
+        );
+
+      color: white;
+
+      box-shadow:
+        0 25px 70px rgba(109,93,252,.25);
+
+      overflow: hidden;
+    }
+
+    .latest::before {
+      content: "";
+
+      position: absolute;
+
+      width: 280px;
+      height: 280px;
+
+      border-radius: 50%;
+
+      right: -100px;
+      top: -130px;
+
+      background: rgba(255,255,255,.09);
+    }
+
+    .latest::after {
+      content: "";
+
+      position: absolute;
+
+      width: 180px;
+      height: 180px;
+
+      border-radius: 50%;
+
+      left: -90px;
+      bottom: -110px;
+
+      background: rgba(255,255,255,.07);
+    }
+
+    .latest-content {
+      position: relative;
+      z-index: 2;
+
+      display: grid;
+      grid-template-columns: 1fr auto;
+
+      gap: 30px;
+      align-items: center;
+    }
+
+    .latest-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
+      margin-bottom: 10px;
+
+      font-size: 12px;
+      font-weight: 800;
+
+      text-transform: uppercase;
+      letter-spacing: .8px;
+
+      opacity: .9;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+
+      border-radius: 50%;
+
+      background: #4ade80;
+
+      box-shadow:
+        0 0 0 5px rgba(74,222,128,.15);
+    }
+
+    .latest h2 {
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .latest-description {
+      max-width: 600px;
+      opacity: .85;
+      font-size: 14px;
+    }
+
+    .latest-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      margin-top: 18px;
+    }
+
+    .meta-pill {
+      padding: 6px 10px;
+
+      border-radius: 999px;
+
+      background: rgba(255,255,255,.13);
+
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+
+      min-width: 190px;
+
+      padding: 15px 22px;
+
+      border-radius: 15px;
+
+      background: white;
+      color: var(--primary);
+
+      text-decoration: none;
+
+      font-size: 14px;
+      font-weight: 850;
+
+      box-shadow:
+        0 10px 25px rgba(0,0,0,.12);
+
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 14px 30px rgba(0,0,0,.17);
+    }
+
+    .download-note {
+      margin-top: 10px;
+
+      text-align: center;
+
+      font-size: 11px;
+      opacity: .7;
+    }
+
+    @media (max-width: 700px) {
+      .latest-content {
+        grid-template-columns: 1fr;
+      }
+
+      .latest {
+        padding: 25px 20px;
+      }
+
+      .download-btn {
+        width: 100%;
+      }
+    }
+
+    /* ================= SECTION ================= */
+
+    .section {
+      padding: 70px 0 0;
+    }
+
+    .section-heading {
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      font-size: 28px;
+      letter-spacing: -.7px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    /* ================= VERSION CARDS ================= */
+
+    .versions {
+      display: grid;
+      gap: 14px;
+    }
+
+    .version-card {
+      background: var(--card);
+
+      border: 1px solid var(--border);
+
+      border-radius: 20px;
+
+      padding: 22px;
+
+      box-shadow:
+        0 10px 30px rgba(15,23,42,.04);
+
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .version-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .version-info {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .version-icon {
+      width: 45px;
+      height: 45px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 13px;
+
+      background: rgba(109,93,252,.09);
+
+      color: var(--primary);
+
+      font-weight: 900;
+    }
+
+    .version-number {
+      font-size: 17px;
+      font-weight: 850;
+    }
+
+    .version-date {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .latest-badge {
+      padding: 5px 9px;
+
+      border-radius: 999px;
+
+      background: rgba(22,163,74,.10);
+
+      color: var(--success);
+
+      font-size: 10px;
+      font-weight: 850;
+
+      text-transform: uppercase;
+    }
+
+    .version-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
+      padding: 10px 14px;
+
+      border-radius: 12px;
+
+      border: 1px solid var(--border);
+
+      text-decoration: none;
+
+      font-size: 12px;
+      font-weight: 750;
+
+      transition: .2s ease;
+    }
+
+    .version-download:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .release-notes {
+      margin-top: 17px;
+
+      padding-top: 17px;
+
+      border-top: 1px solid var(--border);
+    }
+
+    .release-notes h4 {
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .release-notes ul {
+      list-style: none;
+
+      display: grid;
+      gap: 5px;
+    }
+
+    .release-notes li {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .release-notes li::before {
+      content: "✓";
+
+      color: var(--success);
+
+      font-weight: 900;
+
+      margin-right: 8px;
+    }
+
+    .version-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+
+      margin-top: 14px;
+    }
+
+    .detail {
+      padding: 5px 8px;
+
+      border-radius: 8px;
+
+      background: rgba(100,116,139,.08);
+
+      color: var(--muted);
+
+      font-size: 11px;
+    }
+
+    /* ================= INSTALL GUIDE ================= */
+
+    .guide {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .guide-card {
+      padding: 23px;
+
+      border-radius: 20px;
+
+      background: var(--card);
+
+      border: 1px solid var(--border);
+    }
+
+    .guide-number {
+      width: 34px;
+      height: 34px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 10px;
+
+      background: rgba(109,93,252,.10);
+      color: var(--primary);
+
+      font-weight: 900;
+      font-size: 13px;
+
+      margin-bottom: 15px;
+    }
+
+    .guide-card h3 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .guide-card p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 750px) {
+      .guide {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ================= VERIFICATION ================= */
+
+    .verification {
+      margin-top: 14px;
+
+      padding: 25px;
+
+      border-radius: 20px;
+
+      border: 1px solid var(--border);
+
+      background: var(--card);
+    }
+
+    .verification h3 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .verification p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    .hash {
+      padding: 13px;
+
+      border-radius: 11px;
+
+      background: rgba(100,116,139,.08);
+
+      overflow-x: auto;
+
+      font-family: monospace;
+
+      font-size: 11px;
+
+      color: var(--muted);
+    }
+
+    /* ================= FAQ ================= */
+
+    .faq {
+      display: grid;
+      gap: 10px;
+    }
+
+    details {
+      background: var(--card);
+
+      border: 1px solid var(--border);
+
+      border-radius: 16px;
+
+      padding: 17px 20px;
+    }
+
+    summary {
+      cursor: pointer;
+
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    details p {
+      color: var(--muted);
+
+      font-size: 13px;
+
+      margin-top: 10px;
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer {
+      margin-top: 80px;
+
+      padding: 40px 0;
+
+      border-top: 1px solid var(--border);
+
+      color: var(--muted);
+
+      text-align: center;
+
+      font-size: 12px;
+    }
+
+    .footer-brand {
+      color: var(--text);
+
+      font-weight: 850;
+
+      font-size: 16px;
+
+      margin-bottom: 7px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      gap: 18px;
+
+      margin-top: 15px;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    /* ================= ANIMATION ================= */
+
+    @media (prefers-reduced-motion: no-preference) {
+      .version-card,
+      .guide-card,
+      .latest {
+        animation: fadeUp .55s ease both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+  </style></head><body><header>
+  <div class="container nav"><a href="/" class="brand">
+  <span class="brand-logo">M+</span>
+  <span>MyJournal+</span>
+</a>
+
+<nav class="nav-links">
+  <a href="#downloads">Downloads</a>
+  <a href="#releases">Releases</a>
+  <a href="#install">Installation</a>
+  <a href="#faq">FAQ</a>
+</nav>
+
+  </div>
+</header><main>  <!-- HERO -->  <section class="hero"><div class="container">
+
+  <span class="eyebrow">
+    ✦ Official MyJournal+ Downloads
+  </span>
+
+  <h1>
+    Your journal.
+    <span class="gradient-text">Everywhere.</span>
+  </h1>
+
+  <p>
+    Download the latest MyJournal+ Android application,
+    explore previous releases, and keep your app up to date
+    with the newest features, improvements and security fixes.
+  </p>
+
+</div>
+
+  </section>  <!-- LATEST VERSION -->  <section id="downloads"><div class="container">
+
+  <div class="latest">
+
+    <div class="latest-content">
+
+      <div>
+
+        <div class="latest-label">
+          <span class="status-dot"></span>
+          Latest stable release
+        </div>
+
+        <!-- CHANGE VERSION HERE -->
+
+        <h2>
+          MyJournal+ v1.0.0
+        </h2>
+
+        <p class="latest-description">
+          The latest stable version of MyJournal+.
+          Download the application and enjoy your private
+          digital journaling experience.
+        </p>
+
+        <div class="latest-meta">
+
+          <span class="meta-pill">
+            Android
+          </span>
+
+          <span class="meta-pill">
+            v1.0.0
+          </span>
+
+          <span class="meta-pill">
+            15 MB
+          </span>
+
+          <span class="meta-pill">
+            August 31, 2026
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <!-- REPLACE APK URL -->
+
+        <a
+          class="download-btn"
+          href="https://app.myjournalplus.com/downloads/myjournal-plus-v1.0.0.apk"
+          download
+        >
+          ↓&nbsp; Download APK
+        </a>
+
+        <div class="download-note">
+          Official Android application
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+  </section>  <!-- RELEASE HISTORY -->  <section class="section" id="releases"><div class="container">
+
+  <div class="section-heading">
+
+    <h2>Release history</h2>
+
+    <p>
+      Previous MyJournal+ versions and their changes.
+    </p>
+
+  </div>
+
+
+  <div class="versions">
+
+
+    <!-- VERSION 1.0.0 -->
+
+    <article class="version-card">
+
+      <div class="version-top">
+
+        <div class="version-info">
+
+          <div class="version-icon">
+            1
+          </div>
+
+          <div>
+
+            <div class="version-number">
+              v1.0.0
+              <span class="latest-badge">
+                Latest
+              </span>
+            </div>
+
+            <div class="version-date">
+              August 31, 2026
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <a
+          class="version-download"
+          href="https://app.myjournalplus.com/downloads/myjournal-plus-v1.0.0.apk"
+          download
+        >
+          ↓ Download
+        </a>
+
+      </div>
+
+
+      <div class="version-details">
+
+        <span class="detail">
+          Android
+        </span>
+
+        <span class="detail">
+          15 MB
+        </span>
+
+        <span class="detail">
+          Stable
+        </span>
+
+      </div>
+
+
+      <div class="release-notes">
+
+        <h4>What's new</h4>
+
+        <ul>
+
+          <li>
+            Initial public release of MyJournal+
+          </li>
+
+          <li>
+            Personal journaling experience
+          </li>
+
+          <li>
+            Mood tracking
+          </li>
+
+          <li>
+            Premium features
+          </li>
+
+          <li>
+            Improved performance and security
+          </li>
+
+        </ul>
+
+      </div>
+
+    </article>
+
+
+
+  </div>
+
+</div>
+
+  </section>  <!-- INSTALLATION -->  <section class="section" id="install"><div class="container">
+
+  <div class="section-heading">
+
+    <h2>How to install</h2>
+
+    <p>
+      Installing MyJournal+ from this page takes only a few steps.
+    </p>
+
+  </div>
+
+
+  <div class="guide">
+
+    <div class="guide-card">
+
+      <div class="guide-number">
+        01
+      </div>
+
+      <h3>
+        Download
+      </h3>
+
+      <p>
+        Tap the Download APK button and wait for
+        the application package to finish downloading.
+      </p>
+
+    </div>
+
+
+    <div class="guide-card">
+
+      <div class="guide-number">
+        02
+      </div>
+
+      <h3>
+        Allow installation
+      </h3>
+
+      <p>
+        If Android asks for permission, allow installation
+        from the browser or file manager you used to download
+        the APK.
+      </p>
+
+    </div>
+
+
+    <div class="guide-card">
+
+      <div class="guide-number">
+        03
+      </div>
+
+      <h3>
+        Install & open
+      </h3>
+
+      <p>
+        Open the downloaded APK, install MyJournal+,
+        and launch the application.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- SECURITY -->
+
+  <div class="verification">
+
+    <h3>
+      Verify your download
+    </h3>
+
+    <p>
+      For users who want to verify that their downloaded APK
+      has not been modified, compare its SHA-256 checksum
+      with the official checksum published here.
+    </p>
+
+    <!-- REPLACE WITH REAL SHA-256 -->
+
+    <div class="hash">
+      SHA-256:
+      
+    </div>
+
+  </div>
+
+</div>
+
+  </section>  <!-- FAQ -->  <section class="section" id="faq"><div class="container">
+
+  <div class="section-heading">
+
+    <h2>Frequently asked questions</h2>
+
+    <p>
+      Everything you need to know about downloading and updating MyJournal+.
+    </p>
+
+  </div>
+
+
+  <div class="faq">
+
+    <details>
+
+      <summary>
+        Which version should I download?
+      </summary>
+
+      <p>
+        Always download the version marked
+        "Latest" unless you specifically need an older
+        release for compatibility or testing.
+      </p>
+
+    </details>
+
+
+    <details>
+
+      <summary>
+        Do I need to uninstall my current version first?
+      </summary>
+
+      <p>
+        Normally, no. Install the newer version over your
+        existing MyJournal+ installation so that your app
+        remains associated with the same application identity.
+      </p>
+
+    </details>
+
+
+    <details>
+
+      <summary>
+        Will updating delete my journal entries?
+      </summary>
+
+      <p>
+        A normal application update should not erase your
+        application data. However, users should maintain
+        appropriate backups of important information.
+      </p>
+
+    </details>
+
+
+    <details>
+
+      <summary>
+        Why is Android warning me about installing an APK?
+      </summary>
+
+      <p>
+        Android may display a security warning when an
+        application is installed outside Google Play.
+        Make sure you downloaded the APK from the official
+        MyJournal+ website before proceeding.
+      </p>
+
+    </details>
+
+
+    <details>
+
+      <summary>
+        How do I know when a new version is available?
+      </summary>
+
+      <p>
+        Return to this official downloads page whenever you
+        want to check for the newest release. Future versions
+        can also be configured to notify users directly inside
+        the MyJournal+ application.
+      </p>
+
+    </details>
+
+
+  </div>
+
+</div>
+
+  </section></main><!-- FOOTER --><footer>  <div class="container"><div class="footer-brand">
+  MyJournal+
+</div>
+
+<p>
+  Your private space to write, reflect and understand yourself.
+</p>
+
+<div class="footer-links">
+
+  <a href="/">
+    Home
+  </a>
+
+  <a href="/privacy">
+    Privacy
+  </a>
+
+  <a href="/terms">
+    Terms
+  </a>
+
+  <a href="/contact">
+    Support
+  </a>
+
+</div>
+
+<p style="margin-top:18px;">
+  © 2026 MyJournal+. All rights reserved.
+</p>
+
+  </div></footer><script>
+  /*
+   * MyJournal+ Download Page
+   *
+   * Keep this section updated whenever
+   * you release a new version.
+   */
+
+  const CURRENT_VERSION = "1.0.0";
+
+  console.log(
+    "MyJournal+ Downloads — Current version:",
+    CURRENT_VERSION
+  );
+
+
+  /*
+   * Optional: detect Android devices.
+   */
+
+  const isAndroid =
+    /Android/i.test(navigator.userAgent);
+
+  if (!isAndroid) {
+    console.log(
+      "MyJournal+ Android APK detected on a non-Android device."
+    );
+  }
+</script></body>
+</html>

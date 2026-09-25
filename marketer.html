@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyJournal+ | Marketer</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header glass">
+    <div class="logo">MyJournal+ Marketer</div>
+    <div style="display:flex;align-items:center;gap:0.75rem">
+      <span class="text-muted" id="userName"></span>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <button class="nav-btn active" data-tab="overview">Overview</button>
+      <button class="nav-btn" data-tab="referrals">Referrals</button>
+      <button class="nav-btn" data-tab="earnings">Earnings</button>
+      <button class="nav-btn" data-tab="campaigns">Campaigns</button>
+      <button class="nav-btn" data-tab="resources">Resources</button>
+      <button class="nav-btn" data-tab="profile">Profile</button>
+    </nav>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- OVERVIEW -->
+      <div id="tab-overview" class="tab-content space-y">
+        <div class="grid-4">
+          <div class="glass-card kpi">
+            <div class="kpi-label">Total Referrals</div>
+            <div class="kpi-value" id="kpiTotal">0</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-label">Qualified</div>
+            <div class="kpi-value text-emerald" id="kpiQualified">0</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-label">Pending $</div>
+            <div class="kpi-value text-amber" id="kpiPending">$0.00</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-label">Assigned Payout</div>
+            <div class="kpi-value text-purple" id="kpiAssigned">$0.00</div>
+          </div>
+        </div>
+
+        <!-- Referral Link -->
+        <div class="glass-card p-5">
+          <h3 class="section-title" style="margin-bottom:0.5rem">Your Referral Link</h3>
+          <div style="display:flex;gap:0.5rem">
+            <input type="text" id="refLink" readonly />
+            <button class="btn btn-primary btn-sm" id="copyBtn">Copy</button>
+          </div>
+          <p class="text-xs text-muted mt-2">Code: <span id="refCode" style="color:#c4b5fd;font-family:monospace"></span></p>
+        </div>
+
+        <!-- Milestone -->
+        <div class="glass-card p-5">
+          <h3 class="section-title">Milestone Progress</h3>
+          <div class="flex-between text-xs mb-2">
+            <span id="milestoneText">0 / 10 qualified</span>
+            <span id="milestonePct">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="milestoneBar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- 7-day chart -->
+        <div class="glass-card p-5">
+          <h3 class="section-title">7-Day Growth</h3>
+          <div class="chart-box">
+            <div class="chart-bars" id="chartBars"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERRALS -->
+      <div id="tab-referrals" class="tab-content hidden">
+        <div class="glass-card p-5">
+          <h3 class="section-title">Referral History</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Status</th>
+                  <th>Premium</th>
+                  <th>Date</th>
+                  <th>Campaign</th>
+                </tr>
+              </thead>
+              <tbody id="referralsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- EARNINGS -->
+      <div id="tab-earnings" class="tab-content hidden space-y">
+        <div class="grid-2" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="glass-card kpi">
+            <div class="kpi-label">Pending</div>
+            <div class="kpi-value text-amber" id="earnPending">$0.00</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-label">Paid</div>
+            <div class="kpi-value text-emerald" id="earnPaid">$0.00</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-label">Assigned by Admin</div>
+            <div class="kpi-value text-purple" id="earnAssigned">$0.00</div>
+          </div>
+        </div>
+        <div class="glass-card p-5">
+          <h3 class="section-title">Commission History</h3>
+          <div id="commissionsList"></div>
+        </div>
+      </div>
+
+      <!-- CAMPAIGNS -->
+      <div id="tab-campaigns" class="tab-content hidden">
+        <div class="glass-card p-5">
+          <h3 class="section-title">Your Campaigns</h3>
+          <div id="campaignsList" class="grid-2"></div>
+        </div>
+      </div>
+
+      <!-- RESOURCES -->
+      <div id="tab-resources" class="tab-content hidden">
+        <div class="glass-card p-5">
+          <h3 class="section-title">Marketing Resources</h3>
+          <div id="resourcesList" class="grid-2"></div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="tab-profile" class="tab-content hidden">
+        <div class="glass-card p-5" style="max-width:28rem">
+          <h3 class="section-title">Marketer Profile</h3>
+          <div class="space-y text-muted">
+            <div><span class="text-xs">Display Name</span><br><strong id="profName" style="color:#fff"></strong></div>
+            <div><span class="text-xs">Email</span><br><strong id="profEmail" style="color:#fff"></strong></div>
+            <div><span class="text-xs">Referral Code</span><br><strong id="profCode" style="color:#c4b5fd;font-family:monospace"></strong></div>
+            <div><span class="text-xs">Status</span><br><strong id="profStatus" style="color:#fff;text-transform:capitalize"></strong></div>
+            <div><span class="text-xs">Commission Model</span><br><strong id="profModel" style="color:#fff;text-transform:capitalize"></strong></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/marketer.js"></script>
+</body>
+</html>

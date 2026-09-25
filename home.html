@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MyJournal+ — Home</title>
+  <meta name="description" content="MyJournal+ — private journaling, mood tracking, and personal growth." />
+  <meta name="theme-color" content="#7b6cff" />
+  <link rel="canonical" href="https://myjournalplus.com/home" />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="/lock-check.js" defer></script>
+  <script>
+  (function(){try{var g=localStorage.getItem('mj_theme_active');if(!g)return;var p=JSON.parse(g);var t=p.theme||'default',b=p.bgStyle||'gradient';
+  function apply(){var body=document.body;if(!body)return;
+  ['theme-midnight','theme-sunset','theme-forest','theme-rose','theme-ocean','theme-aurora','theme-ember','theme-lavender','theme-slate','bg-style-gradient','bg-style-mesh','bg-style-solid','bg-style-waves','bg-style-noir'].forEach(function(c){body.classList.remove(c)});
+  if(t&&t!=='default')body.classList.add('theme-'+t);body.classList.add('bg-style-'+b);}
+  if(document.body)apply();else document.addEventListener('DOMContentLoaded',apply);
+  }catch(e){}})();
+  </script>
+  <style>
+    /* Home page — clean, non-conflicting layout */
+    body.page-app {
+      padding: 12px 12px 96px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    body.page-app .app-header {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-radius: 16px;
+    }
+    body.page-app .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+    body.page-app .site-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    body.page-app .logo-title {
+      margin: 0;
+      font-size: 1.15rem;
+      line-height: 1.2;
+    }
+    body.page-app .site-desc {
+      display: none;
+    }
+    body.page-app .app-main {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    body.page-app .welcome.glass {
+      padding: 18px 16px;
+      border-radius: 16px;
+    }
+    body.page-app .welcome h2 {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+    body.page-app .welcome .sub {
+      margin: 0 0 14px;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    body.page-app .search-wrap input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.25);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+    }
+    body.page-app .search-wrap input:focus {
+      border-color: rgba(123,108,255,0.5);
+    }
+    body.page-app .entries-list.glass {
+      padding: 16px;
+      border-radius: 16px;
+    }
+    body.page-app .entries-list > h3 {
+      margin: 0 0 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent-2);
+      letter-spacing: 0.02em;
+    }
+    body.page-app #entries-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    body.page-app .entry-item {
+      display: block;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.03);
+      max-width: 100%;
+      overflow: hidden;
+    }
+    body.page-app .entry-left { max-width: 100%; }
+    body.page-app .entry-title {
+      font-size: 0.98rem;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    body.page-app .entry-snippet {
+      font-size: 0.86rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+    }
+    body.page-app .entry-meta {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      opacity: 0.75;
+    }
+    body.page-app .fab {
+      position: fixed;
+      right: 18px;
+      bottom: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #041025;
+      font-weight: 700;
+      box-shadow: 0 12px 32px rgba(123,108,255,0.35);
+      z-index: 40;
+    }
+    body.page-app .app-footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 20px;
+    }
+    body.page-app .ad-bottom-container {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      display: flex;
+      justify-content: center;
+      padding: 6px;
+      background: rgba(7,16,33,0.92);
+      z-index: 30;
+    }
+    body.page-app .ad-bottom-container img { max-width: 100%; height: auto; }
+    body.page-app .side-menu {
+      position: fixed;
+      top: 70px;
+      right: 12px;
+      width: min(280px, 88vw);
+      z-index: 60;
+      border-radius: 16px;
+      padding: 12px;
+    }
+    @media (min-width: 768px) {
+      body.page-app { padding: 20px 20px 100px; }
+      body.page-app .site-desc.small {
+        display: block;
+        margin: 0;
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      body.page-app .header-left { flex-wrap: wrap; }
+    }
+  </style>
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#7b6cff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<script src="https://unpkg.com/lucide@latest"></script>
+<body class="page-app">
+  <header class="app-header glass">
+    <div class="header-left">
+      <img src="logo.png" alt="MyJournal+" class="site-logo" width="36" height="36" />
+      <div>
+        <h1 class="logo-title small">MyJournal+</h1>
+        <p class="site-desc small">Your calm place to write</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <button id="hamburger-btn" class="hamburger" aria-label="Open menu" aria-expanded="false" type="button">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="side-menu" class="side-menu hidden glass" aria-hidden="true">
+    <div class="menu-header"><h3>Menu</h3></div>
+    <ul class="menu-list">
+      <li><a href="home" class="menu-item"><i data-lucide="house"></i> Home</a></li>
+      <li><a href="mood" class="menu-item"> <i data-lucide="chart-no-axes-combined"></i> Mood Tracker</a></li>
+      <li><a href="ai-insights" class="menu-item"><i data-lucide="sparkles"></i> AI Insights</a></li>
+      <li><a href="settings" class="menu-item"> <i data-lucide="settings-2"></i> Settings</a></li>
+      <li><a href="mailto:techcelma@gmail.com?subject=My%20Journal%20Help" class="menu-item"><i data-lucide="message-circle"></i> Contact</a></li>
+      <li><button id="signout-btn" type="button" class="menu-item danger"><i data-lucide="log-out"></i> Sign out</button></li>
+    </ul>
+  </nav>
+
+<script>
+    lucide.createIcons();
+</script>
+
+  <main class="app-main">
+    <section class="view active">
+      <div class="welcome glass">
+        <h2 id="welcome-title">Welcome</h2>
+        <p class="sub">Capture thoughts, wins, and lessons — your story, one entry at a time.</p>
+        <div class="search-wrap">
+          <input id="search-input" type="search" placeholder="Search entries…" autocomplete="off" />
+        </div>
+      </div>
+
+      <div id="admin-feature-slot"></div>
+
+      <section class="entries-list glass" id="entries-container">
+        <h3>Your entries</h3>
+        <div id="entries-list" class="entries-scroll"></div>
+      </section>
+    </section>
+  </main>
+
+  <button id="add-entry-btn" class="fab" type="button" aria-label="Add entry">+</button>
+
+  <div id="confirm-modal" class="modal hidden">
+    <div class="modal-card smallS glass">
+      <h3 id="confirm-title">Confirm</h3>
+      <p id="confirm-message"></p>
+      <div class="modal-actions">
+        <button id="confirm-ok" type="button" class="btn danger">Yes</button>
+        <button id="confirm-cancel" type="button" class="btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">Celma · 2026</footer>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+  <script src="main.js"></script>
+<script src="referral-signup-helper.js"></script>
+<script src="pwa-install.js"></script>
+</body>
+</html>

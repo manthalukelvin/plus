@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Offline — MyJournal+</title>
+  <style>
+    body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+      font-family: system-ui, sans-serif; background:#0b1020; color:#eaf2ff; text-align:center; padding:24px; }
+    .card { max-width:360px; }
+    h1 { font-size:22px; margin:0 0 8px; }
+    p { color:#9aa4b2; line-height:1.5; }
+    a { color:#4dd3ff; }
+  </style>
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#7b6cff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+  <div class="card">
+    <div style="font-size:48px;margin-bottom:12px">📔</div>
+    <h1>You're offline</h1>
+    <p>MyJournal+ can't reach the network right now. Open a page you've visited before (Home, Edit) — those stay available from cache.</p>
+    <p><a href="/home">Try Home</a> · <a href="/edit">New entry</a></p>
+  </div>
+<script src="pwa-install.js"></script>
+</body>
+</html>

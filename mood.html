@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MyJournal+ — Mood Tracker (Premium)</title>
+  <link href="styles.css" rel="stylesheet">
+<!-- SEO Meta Tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="MyJournal+ - A calm and private journaling app for daily reflection, mood tracking, and personal growth. Free with optional premium features.">
+<meta name="keywords" content="journal, journaling app, mood tracker, personal reflection, diary, mental health, private journaling, productivity">
+<meta name="author" content="Celma Tech Foundation">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+<!-- Canonical URL (IMPORTANT - prevents duplicate content) -->
+<link rel="canonical" href="https://myjournalplus.com">
+
+<!-- Open Graph / Social Media Sharing -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myjournalplus.com">
+<meta property="og:title" content="MyJournal+ — Reflect, Track, Grow">
+<meta property="og:description" content="A calm, private journaling space for daily reflection, mood tracking, and personal growth. Perfect for students and young professionals.">
+<meta property="og:image" content="https://myjournalplus.com/logo.png">
+<meta property="og:site_name" content="MyJournal+">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://myjournalplus.com">
+<meta name="twitter:title" content="MyJournal+ — Private Journaling App">
+<meta name="twitter:description" content="Your personal productivity companion for reflection, mood tracking, and growth.">
+<meta name="twitter:image" content="https://myjournalplus.com/logo.png">
+<meta name="twitter:creator" content="@CelmaTech">
+
+<!-- Mobile App Meta Tags -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MyJournal+">
+<meta name="theme-color" content="#7b6cff">
+
+<!-- PWA Manifest -->
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="shortcut icon" href="logo.png">
+
+<!-- Google Site Verification (if you have it) -->
+<meta name="google-site-verification" content="jb0wFC5mJ_tGoxbxcw6LlrYfwIC7tRzDNaj4ddNo83Q">
+
+
+
+  <!-- Chart.js for interactive charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- ===== FAVICON & ICONS ===== -->
+
+<!-- Primary Favicon (SVG - Modern browsers) -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260525" />
+
+<!-- PNG Fallback (96x96 - Good for most uses) -->
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=20260525" />
+
+<!-- Legacy ICO Fallback (Very old browsers) -->
+<link rel="shortcut icon" href="/favicon.ico?v=20260525" />
+
+<!-- Apple iOS Home Screen -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20260525" />
+<meta name="apple-mobile-web-app-title" content="MyJournal+" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!-- PWA Manifest -->
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KT6GJ8Z3');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Theme Color (Browser Address Bar) -->
+<meta name="theme-color" content="#7b6cff" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PCCRP91YV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7PCCRP91YV');
+  </script>
+
+  <script src="/lock-check.js" defer></script>
+
+  <style>
+    /* Small page-scoped styles to support the enhanced layout */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: 1fr 440px;
+      gap: 18px;
+      align-items: start;
+    }
+    .mood-left { display:flex; flex-direction:column; gap:18px; }
+    .mood-right { display:flex; flex-direction:column; gap:18px; width:100%; }
+    .analytics-row { display:flex; gap:12px; flex-wrap:wrap; }
+    .stat-card { flex:1 1 160px; padding:14px; border-radius:12px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); text-align:center; }
+    .stat-value { font-size:20px; font-weight:800; color:var(--accent-2); }
+    .chart-card { padding:12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04); }
+    .filters { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .heatmap { display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; padding:10px; border-radius:10px; background:rgba(255,255,255,0.01); }
+    .heat-sq { width:18px; height:18px; border-radius:4px; margin:2px; display:inline-block; }
+    .history-list .entry-item { display:flex; gap:10px; align-items:flex-start; }
+    .insights { padding:12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04); min-height:160px; }
+    .controls { display:flex; gap:8px; align-items:center; justify-content:flex-end; flex-wrap:wrap; }
+    .tiny { font-size:13px; color:var(--muted); }
+    @media (max-width:980px) {
+      .mood-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+<script>
+(function(){try{var g=localStorage.getItem('mj_theme_active');if(!g)return;var p=JSON.parse(g);var t=p.theme||'default',b=p.bgStyle||'gradient';
+document.documentElement.dataset.mjTheme=t;document.documentElement.dataset.mjBg=b;
+var css='body.theme-ready{}';
+// apply classes as soon as body exists
+function apply(){var body=document.body;if(!body)return;['theme-midnight','theme-sunset','theme-forest','theme-rose','theme-ocean','theme-aurora','theme-ember','theme-lavender','theme-slate','bg-style-gradient','bg-style-mesh','bg-style-solid','bg-style-waves','bg-style-noir'].forEach(function(c){body.classList.remove(c)});if(t&&t!=='default')body.classList.add('theme-'+t);body.classList.add('bg-style-'+b);}
+if(document.body)apply();else document.addEventListener('DOMContentLoaded',apply);
+}catch(e){}})();
+</script>
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#7b6cff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<script src="https://unpkg.com/lucide@latest"></script>
+<body class="page-mood">
+  <header class="app-header glass">
+    <div class="header-left">
+      <img src="logo.png" alt="MyJournal+ logo" class="site-logo" />
+      <h1 class="logo-title small">MyJournal+</h1>
+      <p class="site-desc small">Track your mood and emotional journey — Premium analytics</p>
+    </div>
+    <div class="header-right">
+      <button id="hamburger-btn" class="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+ <nav id="side-menu" class="side-menu hidden glass" aria-hidden="true">
+    <div class="menu-header"><h3>Menu</h3></div>
+    <ul class="menu-list">
+      <li><a href="home" class="menu-item"><i data-lucide="house"></i> Home</a></li>
+      <li><a href="mood" class="menu-item"><i data-lucide="chart-no-axes-combined"></i> Mood Tracker</a></li>
+      <li><a href="settings" class="menu-item"> <i data-lucide="settings-2"></i> Settings</a></li>
+<li><a href="mailto:techcelma@gmail.com?subject=My%20Journal%20Help%20Center" id="contact-us-btn" class="menu-item"><i data-lucide="message-circle"></i> Contact us</a></li>
+      <li><button id="signout-btn" class="menu-item danger"><i data-lucide="log-out"></i>Sign out</button></li>
+    </ul>
+  </nav>
+
+<script>
+    lucide.createIcons();
+</script>
+
+  <main class="app-main" style="max-width:1200px;margin:18px auto;gap:18px;display:block">
+    <section id="view-mood" class="view active">
+      <div class="welcome glass" style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+        <div>
+          <h2>Mood Tracker — Premium Analytics</h2>
+          <p class="sub">Record daily moods. Visualize trends, streaks, and get actionable insights.</p>
+        </div>
+        <div class="controls">
+          <button id="export-csv" class="btn">Export CSV</button>
+          <a href="ai-insights" class="btn primary">AI Insights</a>
+        </div>
+      </div>
+
+      <div class="mood-grid" style="margin-top:16px">
+        <div class="mood-left">
+          <!-- Top analytics -->
+          <div class="analytics-row">
+            <div class="stat-card">
+              <div class="tiny">Today's Mood</div>
+              <div class="stat-value" id="today-mood">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="tiny">Weekly Avg</div>
+              <div class="stat-value" id="week-avg">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="tiny">Total Entries</div>
+              <div class="stat-value" id="total-entries">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="tiny">Current Streak</div>
+              <div class="stat-value" id="streak-days">0</div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="chart-card" style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <h4 style="margin:0">Mood trend (last 30 days)</h4>
+              <div class="tiny">Smoothing: <span id="trend-smoothing">raw</span></div>
+            </div>
+            <canvas id="trend-chart" style="height:220px; width:100%;"></canvas>
+          </div>
+
+          <div class="chart-card" style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <h4 style="margin:0">Distribution (last 30 days)</h4>
+              <div class="tiny">Filter by tag: <select id="tag-filter"><option value="">All</option></select></div>
+            </div>
+            <canvas id="dist-chart" style="height:160px; width:100%;"></canvas>
+          </div>
+
+          <!-- Heatmap -->
+          <div class="chart-card" style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <h4 style="margin:0">30‑day Mood Heatmap</h4>
+              <div class="tiny">Hover squares for detail</div>
+            </div>
+            <div id="heatmap" class="heatmap" style="margin-top:12px"></div>
+          </div>
+        </div>
+
+        <aside class="mood-right">
+          <!-- Filters & entry form -->
+          <div class="chart-card">
+            <h4 style="margin-top:0">Record Your Mood</h4>
+            <div class="mood-options" id="mood-options" style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="mood-btn" data-emoji="😄" data-value="5"><span class="mood-emoji">😄</span><span class="mood-label">Excellent</span></button>
+              <button class="mood-btn" data-emoji="🙂" data-value="4"><span class="mood-emoji">🙂</span><span class="mood-label">Good</span></button>
+              <button class="mood-btn" data-emoji="😐" data-value="3"><span class="mood-emoji">😐</span><span class="mood-label">Okay</span></button>
+              <button class="mood-btn" data-emoji="😕" data-value="2"><span class="mood-emoji">😕</span><span class="mood-label">Bad</span></button>
+              <button class="mood-btn" data-emoji="😔" data-value="1"><span class="mood-emoji">😔</span><span class="mood-label">Terrible</span></button>
+            </div>
+            <textarea id="mood-desc" placeholder="How are you feeling? Add notes or triggers..." style="width:100%;margin-top:8px;height:80px"></textarea>
+
+            <label class="tiny" style="margin-top:8px;display:block">Tags (comma separated)</label>
+            <input id="mood-tags" placeholder="work, sleep, relationships" />
+
+            <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+              <button id="save-mood" class="btn primary">Record mood</button>
+              <button id="cancel-mood" class="btn">Clear</button>
+            </div>
+          </div>
+
+          <!-- History -->
+          <div class="chart-card" style="max-height:420px;overflow:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <h4 style="margin:0">Mood History</h4>
+              <div class="tiny">
+                <label style="margin-right:6px">Range</label>
+                <select id="range-select">
+                  <option value="7">7d</option>
+                  <option value="14">14d</option>
+                  <option selected value="30">30d</option>
+                  <option value="90">90d</option>
+                </select>
+              </div>
+            </div>
+            <div id="history" class="history-list" style="margin-top:8px"></div>
+          </div>
+
+          <!-- Insights -->
+          <div class="insights">
+            <h4 style="margin-top:0">Insights</h4>
+            <div id="insights-content" class="tiny" style="min-height:80px">No insights yet — press "AI Insights" for a quick summary of recent moods (requires backend).</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+   <footer style="width:95%;display:inline;justify-content:space-between;text-align:center;align-items:center;margin-top:10px">
+      <div><a href="about" class="tiny-link">About</a> · <a href="terms" class="tiny-link">Terms</a> · <a href="privacy" class="tiny-link">Privacy</a> </br> <a href="https://www.appcreator24.com/app3925490-pv2y17">Download Android App </a> </div> 
+      <div class="app-footer">Celma - 2026</div>
+    </footer>
+
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+
+  <!-- Keep your shared app logic (main.js) -->
+  <script src="main.js"></script>
+
+  <!-- Page-specific enhancement: replace initMoodPageFeatures(uid) after main.js loads -->
+  <script>
+  // Wait a tick to ensure main.js has defined firebase/auth/db etc.
+  (function(){
+    // Utility: convert Firestore timestamp -> Date
+    function toDate(ts) {
+      if (!ts) return null;
+      if (ts.toDate) return ts.toDate();
+      return new Date(ts);
+    }
+
+    // Colors + emoji + phrase for mood values 1..5
+    const MOOD_COLORS = {
+      1: '#ff6b6b',
+      2: '#ffb86b',
+      3: '#ffd66b',
+      4: '#8ce07f',
+      5: '#4dd3ff'
+    };
+    const MOOD_META = {
+      1: { emoji: '😔', label: 'Terrible', phrase: 'Very low energy — be gentle with yourself' },
+      2: { emoji: '😕', label: 'Bad', phrase: 'Rough day — small steps still count' },
+      3: { emoji: '😐', label: 'Okay', phrase: 'Neutral / mixed — steady and coping' },
+      4: { emoji: '🙂', label: 'Good', phrase: 'Positive mood — things feel manageable' },
+      5: { emoji: '😄', label: 'Excellent', phrase: 'High energy — celebrate the good moments' }
+    };
+    function formatMoodValue(v) {
+      const n = Math.round(Number(v));
+      const m = MOOD_META[n] || MOOD_META[Math.max(1, Math.min(5, n))];
+      if (!m) return String(v);
+      return `${m.emoji} ${m.label} (${n}) — ${m.phrase}`;
+    }
+    function formatMoodShort(v) {
+      const n = Math.round(Number(v));
+      const m = MOOD_META[n];
+      if (!m) return String(v);
+      return `${m.emoji} ${m.label}`;
+    }
+
+    // Replace / override the initMoodPageFeatures function that main.js calls
+    window.initMoodPageFeatures = function(uid) {
+      if (!uid) return;
+      // DOM refs
+      const todayEl = document.getElementById('today-mood');
+      const weekAvgEl = document.getElementById('week-avg');
+      const totalEl = document.getElementById('total-entries');
+      const streakEl = document.getElementById('streak-days');
+      const historyEl = document.getElementById('history');
+      const heatmapEl = document.getElementById('heatmap');
+      const tagFilter = document.getElementById('tag-filter');
+      const rangeSelect = document.getElementById('range-select');
+      const exportBtn = document.getElementById('export-csv');
+      const aiBtn = document.getElementById('btn-ai-insights');
+
+      const trendCtx = document.getElementById('trend-chart').getContext('2d');
+      const distCtx = document.getElementById('dist-chart').getContext('2d');
+
+      let trendChart = null;
+      let distChart = null;
+      let moodsCache = [];
+
+      // Helper: render history list
+      function renderHistory(list) {
+        historyEl.innerHTML = '';
+        if (!list.length) { historyEl.innerHTML = '<p class="tiny" style="color:var(--muted)">No moods recorded in this range.</p>'; return; }
+        list.forEach(m => {
+          const d = toDate(m.createdAt) || new Date();
+          const el = document.createElement('div');
+          el.className = 'entry-item';
+          el.innerHTML = `
+            <div style="width:48px;font-size:20px">${m.emoji || ''}</div>
+            <div style="flex:1">
+              <div style="font-weight:700">${formatMoodShort(m.value)} • <span class="tiny" style="font-weight:600;color:var(--muted)">${d.toLocaleString()}</span></div>
+              <div class="tiny" style="margin-top:4px">${(m.description || '')}</div>
+              <div class="tiny" style="margin-top:6px;color:var(--muted)">${(m.tags || []).join(', ')}</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn small" data-id="${m.id}" data-action="delete">Delete</button>
+            </div>`;
+          // delete handling
+          const delBtn = el.querySelector('button[data-action="delete"]');
+          delBtn.addEventListener('click', async () => {
+            if (!confirm('Delete this mood entry?')) return;
+            delBtn.setAttribute('disabled','true');
+            try {
+              await db.collection('users').doc(uid).collection('moods').doc(m.id).delete();
+              toast('Deleted');
+            } catch (e) { showError('Unable to delete mood'); delBtn.removeAttribute('disabled'); }
+          });
+          historyEl.appendChild(el);
+        });
+      }
+
+      // Helper: compute analytics + charts for provided moods array
+      function computeAndRender(moods, daysRange = 30, chosenTag = '') {
+        // Filter by tag if set
+        let filtered = moods.slice();
+        if (chosenTag) filtered = filtered.filter(m => (m.tags || []).map(t => t.toLowerCase()).includes(chosenTag.toLowerCase()));
+
+        // time cutoff
+        const cutoff = new Date(Date.now() - (daysRange * 24*60*60*1000));
+        filtered = filtered.filter(m => (toDate(m.createdAt) || new Date(0)) >= cutoff);
+
+        // Sort ascending by date for trend
+        filtered.sort((a,b) => (toDate(a.createdAt) || 0) - (toDate(b.createdAt) || 0));
+
+        // Analytics
+        const total = filtered.length;
+        totalEl.textContent = total;
+
+        // Today's mood
+        const today = moods.length ? moods[0] : null;
+        todayEl.textContent = formatMoodShort(today ? (today.value || '-') : '-');
+
+        // Weekly average (last 7 days)
+        const weekCut = new Date(Date.now() - (7*24*60*60*1000));
+        const weekItems = moods.filter(m => (toDate(m.createdAt) || 0) >= weekCut);
+        const weekAvg = weekItems.length ? (weekItems.reduce((s,x)=>s+(x.value||0),0)/weekItems.length).toFixed(1) : '-';
+        weekAvgEl.textContent = formatMoodShort(weekAvg);
+
+        // Streak calculation (consecutive days with at least one mood)
+        let streak = 0;
+        if (moods.length) {
+          let prevDay = null;
+          for (let i = 0; i < moods.length; i++) {
+            const d = toDate(moods[i].createdAt) || new Date();
+            const day = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+            if (i === 0) { streak = 1; prevDay = day; }
+            else {
+              const diff = Math.round((prevDay - day) / (1000*60*60*24));
+              if (diff <= 1) { streak++; prevDay = day; } else break;
+            }
+          }
+        }
+        streakEl.textContent = streak;
+
+        // Render history list (most recent first)
+        renderHistory(filtered.slice().sort((a,b)=> (toDate(b.createdAt)||0) - (toDate(a.createdAt)||0)));
+
+        // Trend chart: build x labels (one per day in range) and average mood per day
+        const days = [];
+        const dayMap = {};
+        for (let i = daysRange - 1; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const key = d.toISOString().slice(0,10);
+          days.push(key);
+          dayMap[key] = [];
+        }
+        filtered.forEach(m => {
+          const d = toDate(m.createdAt) || new Date();
+          const key = d.toISOString().slice(0,10);
+          if (dayMap[key]) dayMap[key].push(m.value || 0);
+        });
+        const avgPerDay = days.map(k => {
+          const arr = dayMap[k];
+          if (!arr || !arr.length) return null;
+          return arr.reduce((s,x)=>s+x,0)/arr.length;
+        });
+
+        // Destroy previous chart if exists
+        if (trendChart) { try { trendChart.destroy(); } catch(e){} trendChart = null; }
+        trendChart = new Chart(trendCtx, {
+          type: 'line',
+          data: {
+            labels: days.map(d => new Date(d).toLocaleDateString()),
+            datasets: [{
+              label: 'Avg mood',
+              data: avgPerDay,
+              borderColor: 'rgba(77,211,255,0.9)',
+              backgroundColor: 'rgba(77,211,255,0.12)',
+              spanGaps: true,
+              tension: 0.25,
+              pointRadius: 4,
+              pointBackgroundColor: function(context){
+                const v = context.dataset.data[context.dataIndex];
+                return v ? MOOD_COLORS[Math.round(v)] || '#ddd' : 'rgba(255,255,255,0.12)';
+              }
+            }]
+          },
+          options: {
+            normalized: true,
+            scales: {
+              y: { suggestedMin: 0.8, suggestedMax: 5.2, ticks: { stepSize: 1 } }
+            },
+            plugins: { legend:{ display:false }, tooltip: { callbacks: { label: ctx => `Avg: ${ctx.formattedValue || '-'}` } } }
+          }
+        });
+
+        // Distribution chart: counts per mood value
+        const counts = [0,0,0,0,0,0]; // index by value
+        filtered.forEach(m => counts[m.value || 0]++);
+        const distData = [counts[1], counts[2], counts[3], counts[4], counts[5]];
+        if (distChart) { try { distChart.destroy(); } catch(e){} distChart = null; }
+        distChart = new Chart(distCtx, {
+          type: 'bar',
+          data: {
+            labels: ['1','2','3','4','5'],
+            datasets:[{
+              label:'Count',
+              data: distData,
+              backgroundColor: ['#ff6b6b','#ffb86b','#ffd66b','#8ce07f','#4dd3ff']
+            }]
+          },
+          options:{ plugins:{ legend:{display:false} }, scales:{ y:{ beginAtZero:true, ticks:{stepSize:1} }} }
+        });
+
+        // Heatmap rendering — build last N days squares colored by average mood
+        heatmapEl.innerHTML = '';
+        const heatDays = days.slice(-30);
+        heatDays.forEach(k => {
+          const arr = dayMap[k] || [];
+          const avg = arr.length ? Math.round(arr.reduce((s,x)=>s+x,0)/arr.length) : 0;
+          const sq = document.createElement('div');
+          sq.className = 'heat-sq';
+          sq.title = `${new Date(k).toLocaleDateString()} — ${arr.length ? ('Avg: ' + (avg || '-')) : 'No entry'}`;
+          sq.style.background = avg ? MOOD_COLORS[avg] : 'rgba(255,255,255,0.04)';
+          heatmapEl.appendChild(sq);
+        });
+
+        // Populate tag filter based on moodsCache
+        const tagsSet = new Set();
+        (moods || []).forEach(m => (m.tags || []).forEach(t => tagsSet.add(t)));
+        // keep selected tag
+        const selectedTag = tagFilter.value || '';
+        tagFilter.innerHTML = '<option value="">All</option>';
+        Array.from(tagsSet).sort().forEach(t => {
+          const o = document.createElement('option'); o.value = t; o.textContent = t;
+          if (t === selectedTag) o.selected = true;
+          tagFilter.appendChild(o);
+        });
+      } // computeAndRender
+
+      // Export CSV (simple)
+      function exportCSV(moods) {
+        const rows = [['Date','Value','Emoji','Description','Tags']];
+        moods.forEach(m => {
+          const d = toDate(m.createdAt) || new Date();
+          const tags = (m.tags || []).join(';');
+          const desc = (m.description || '').replace(/"/g,'""');
+          rows.push([d.toISOString(), m.value || '', m.emoji || '', `"${desc}"`, `"${tags}"`]);
+        });
+        const csv = rows.map(r => r.join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'mood-entries.csv'; document.body.appendChild(a);
+        a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      // Listener: moods collection realtime
+      const q = db.collection('users').doc(uid).collection('moods').orderBy('createdAt','desc');
+      const unsubscribe = q.onSnapshot(snap => {
+        const arr = [];
+        snap.forEach(d => arr.push({ id: d.id, ...d.data() }));
+        moodsCache = arr;
+        const daysRange = Number(rangeSelect.value || 30);
+        const chosenTag = tagFilter.value || '';
+        computeAndRender(moodsCache, daysRange, chosenTag);
+      }, err => { console.error(err); showError('Failed to load moods'); });
+
+      // Interactions: saving mood
+      let selectedMoodValue = null;
+      const moodBtns = document.querySelectorAll('#mood-options .mood-btn');
+      moodBtns.forEach(b => {
+        b.addEventListener('click', () => {
+          moodBtns.forEach(x=>x.classList.remove('active'));
+          b.classList.add('active');
+          selectedMoodValue = Number(b.dataset.value);
+        });
+      });
+      const saveBtn = document.getElementById('save-mood');
+      saveBtn.addEventListener('click', async () => {
+        if (!selectedMoodValue) return showError('Select a mood first');
+        const desc = (document.getElementById('mood-desc') || {}).value || '';
+        const tags = (document.getElementById('mood-tags') || {}).value.split(',').map(t=>t.trim()).filter(Boolean);
+        saveBtn.setAttribute('disabled','true');
+        try {
+          await db.collection('users').doc(uid).collection('moods').add({
+            value: selectedMoodValue,
+            emoji: document.querySelector(`#mood-options .mood-btn[data-value="${selectedMoodValue}"]`)?.dataset?.emoji || '',
+            description: desc,
+            tags,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          // clear UI
+          selectedMoodValue = null;
+          moodBtns.forEach(x=>x.classList.remove('active'));
+          document.getElementById('mood-desc').value = '';
+          document.getElementById('mood-tags').value = '';
+          toast('Mood recorded');
+        } catch (e) { console.error(e); showError('Unable to record mood'); } finally { saveBtn.removeAttribute('disabled'); }
+      });
+
+      // Controls: range & tag filters
+      rangeSelect.addEventListener('change', () => {
+        const days = Number(rangeSelect.value || 30);
+        computeAndRender(moodsCache, days, tagFilter.value || '');
+      });
+      tagFilter.addEventListener('change', () => {
+        const days = Number(rangeSelect.value || 30);
+        computeAndRender(moodsCache, days, tagFilter.value || '');
+      });
+
+      // Export handler
+      exportBtn.addEventListener('click', () => exportCSV(moodsCache));
+
+      // AI insights (placeholder: calls backend if BACKEND_AI_INSIGHTS_URL defined in main.js)
+      aiBtn.addEventListener('click', async () => {
+        try {
+          const text = moodsCache.slice(0, 60).map(m => `${(toDate(m.createdAt)||'').toLocaleDateString()}: ${m.value} — ${m.description||''}`).join('\n');
+          if (!text) { showDialog('Not enough entries to generate insights'); return; }
+          if (typeof BACKEND_AI_INSIGHTS_URL === 'undefined' || !BACKEND_AI_INSIGHTS_URL) {
+            // fallback quick client-side summary
+            const avg = (moodsCache.reduce((s,m)=>s+(m.value||0),0) / (moodsCache.length||1)).toFixed(2);
+            document.getElementById('insights-content').textContent = `Recent average mood: ${avg}. Look for recurring tags and triggers in your entries.`;
+            return;
+          }
+          const res = await fetch(BACKEND_AI_INSIGHTS_URL, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ text })
+          });
+          const j = await res.json();
+          document.getElementById('insights-content').textContent = j.insights || 'No insights returned';
+        } catch (e) {
+          console.error(e);
+          showError('AI insights failed');
+        }
+      });
+
+      // Cleanup when page unloads
+      window.addEventListener('beforeunload', () => {
+        try { unsubscribe(); } catch(e) {}
+      });
+    }; // end initMoodPageFeatures override
+
+    // If main.js already called initMoodPageFeatures earlier, it will be re-invoked when the user doc watch unblocks.
+    // No explicit re-run here to avoid duplicating listeners; your auth.onAuthStateChanged -> setupMoodPageGate will call it when appropriate.
+  })();
+  </script>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KT6GJ8Z3"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<script src="pwa-install.js"></script>
+</body>
+</html>

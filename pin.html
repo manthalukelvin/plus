@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Unlock with PIN</title>
+  <!-- ===== FAVICON & ICONS ===== -->
+
+<!-- Primary Favicon (SVG - Modern browsers) -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260525" />
+
+<!-- PNG Fallback (96x96 - Good for most uses) -->
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=20260525" />
+
+<!-- Legacy ICO Fallback (Very old browsers) -->
+<link rel="shortcut icon" href="/favicon.ico?v=20260525" />
+
+<!-- Apple iOS Home Screen -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20260525" />
+<meta name="apple-mobile-web-app-title" content="MyJournal+" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!-- PWA Manifest -->
+
+<!-- Theme Color (Browser Address Bar) -->
+<meta name="theme-color" content="#7b6cff" />
+  <link rel="stylesheet" href="/assets/pin-styles.css">
+  <style>
+    /* Minimal inline styles preserved from previous pin page for layout */
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#4f46e5;--muted:#9aa4b2;--danger:#ef4444}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    body{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#071029,#0b1220);color:#e6eef8}
+    .card{width:380px;padding:28px;border-radius:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    h1{margin:0 0 6px;font-size:20px}
+    p.subtitle{margin:0 0 18px;color:var(--muted);font-size:13px}
+    .pin-input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;font-size:16px;box-sizing:border-box}
+    .row{display:flex;gap:10px;margin-top:14px}
+    button.btn{flex:1;padding:10px 12px;border-radius:10px;border:0;font-weight:600;cursor:pointer}
+    button.primary{background:var(--accent);color:white}
+    button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.03)}
+    .hint{margin-top:10px;color:var(--muted);font-size:13px}
+    .error{color:var(--danger);margin-top:10px;font-weight:600}
+    .hidden{display:none}
+    .success-badge{display:inline-block;background:#0f5132;color:#a7f3d0;padding:6px 10px;border-radius:999px;font-size:13px;margin-top:10px}
+    .muted-input{background:rgba(255,255,255,0.02);border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,0.03);color:inherit}
+  </style>
+<script>
+(function(){try{var g=localStorage.getItem('mj_theme_active');if(!g)return;var p=JSON.parse(g);var t=p.theme||'default',b=p.bgStyle||'gradient';
+document.documentElement.dataset.mjTheme=t;document.documentElement.dataset.mjBg=b;
+var css='body.theme-ready{}';
+// apply classes as soon as body exists
+function apply(){var body=document.body;if(!body)return;['theme-midnight','theme-sunset','theme-forest','theme-rose','theme-ocean','theme-aurora','theme-ember','theme-lavender','theme-slate','bg-style-gradient','bg-style-mesh','bg-style-solid','bg-style-waves','bg-style-noir'].forEach(function(c){body.classList.remove(c)});if(t&&t!=='default')body.classList.add('theme-'+t);body.classList.add('bg-style-'+b);}
+if(document.body)apply();else document.addEventListener('DOMContentLoaded',apply);
+}catch(e){}})();
+</script>
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#7b6cff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="unlock-title">
+    <div class="pin-icon">🔐 MyJournal+</div><br/>
+    <h1 id="unlock-title">Enter your PIN</h1>
+    <p class="subtitle">This page is locked. Enter your 4-6 digit PIN to continue.</p>
+
+    <input id="pinInput" inputmode="numeric" maxlength="6" class="pin-input" placeholder="••••" aria-label="PIN" />
+
+    <div class="row">
+      <button id="continueBtn" class="btn primary">Continue</button>
+      <button id="forgotBtn" class="btn ghost">Forgot</button>
+    </div>
+
+    <div id="message" class="error hidden" role="alert"></div>
+    <div id="info" class="hint"></div>
+  </div>
+
+  <!-- Forgot modal -->
+  <div id="modalOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;align-items:center;justify-content:center;position:fixed;inset:0;z-index:9999;">
+    <div class="modal" role="document" style="width:420px;background:#071025;border-radius:12px;padding:18px;color:#e6eef8">
+      <h3 id="modalTitle">Authenticate to reset PIN</h3>
+      <p class="muted" style="margin:4px 0 12px;color:var(--muted)">Confirm your account password (or reauth with provider) to reset the PIN.</p>
+
+      <input id="passwordInput" type="password" class="muted-input" placeholder="Account password" />
+
+      <div id="pwError" class="error hidden"></div>
+
+      <div id="resetSection" class="hidden" style="margin-top:12px;">
+        <p style="margin:12px 0 6px;color:var(--muted)">Enter a new PIN</p>
+        <input id="newPin" inputmode="numeric" maxlength="6" class="muted-input" placeholder="New PIN" />
+        <input id="confirmPin" inputmode="numeric" maxlength="6" class="muted-input" placeholder="Confirm new PIN" style="margin-top:8px" />
+        <div id="resetMsg" class="success-badge hidden">Password verified — set a new PIN</div>
+      </div>
+
+      <div class="actions" style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+        <button id="modalCancel" class="btn ghost">Cancel</button>
+        <button id="modalSubmit" class="btn primary">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+  // Firebase config (must match main.js)
+  const firebaseConfig = {
+    apiKey: "AIzaSyAtzbIZvFLQM65QhOwph0PFpO9vOYcYUdE",
+    authDomain: "myjournal-plus.firebaseapp.com",
+    projectId: "myjournal-plus",
+    storageBucket: "myjournal-plus.firebasestorage.app",
+    messagingSenderId: "288260274583",
+    appId: "1:288260274583:web:9c40aafed9ab9fa30e6cd2",
+    measurementId: "G-MXJ84MJGTR"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // SHA-256 hashing helper (salted by uid)
+  async function hashPin(pin, uid) {
+    if (!pin || !uid) return null;
+    try {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(`${pin}:${uid}`);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) {
+      console.error('hashPin error', e);
+      return null;
+    }
+  }
+
+  // UI elements
+  const pinInput = document.getElementById('pinInput');
+  const continueBtn = document.getElementById('continueBtn');
+  const forgotBtn = document.getElementById('forgotBtn');
+  const message = document.getElementById('message');
+  const info = document.getElementById('info');
+
+  const modalOverlay = document.getElementById('modalOverlay');
+  const passwordInput = document.getElementById('passwordInput');
+  const modalCancel = document.getElementById('modalCancel');
+  const modalSubmit = document.getElementById('modalSubmit');
+  const pwError = document.getElementById('pwError');
+
+  const resetSection = document.getElementById('resetSection');
+  const newPin = document.getElementById('newPin');
+  const confirmPin = document.getElementById('confirmPin');
+  const resetMsg = document.getElementById('resetMsg');
+
+  function show(el){ el.classList.remove('hidden'); el.style.display = ''; el.removeAttribute('aria-hidden'); }
+  function hide(el){ el.classList.add('hidden'); el.style.display = 'none'; el.setAttribute('aria-hidden','true'); }
+  function setMessage(text){ message.textContent = text; if(text) show(message); else hide(message); }
+
+  let attempts = 5;
+  let currentUser = null;
+
+  // Wait for auth state
+  auth.onAuthStateChanged(async (u) => {
+    currentUser = u;
+    if (!u) {
+      // Not logged in -> redirect to login page
+      setMessage('Not signed in. Redirecting to login...');
+      setTimeout(() => { window.location.href = 'index'; }, 800);
+      return;
+    }
+    // Show info about where we'll return to
+    const after = sessionStorage.getItem('mj_after_pin') || localStorage.getItem('pinPrevURL') || '';
+    info.textContent = after ? ('Returning to: ' + after) : 'Returning to home after unlock';
+  });
+
+  async function verifyPinWithServer(pinValue) {
+    if (!currentUser) throw new Error('No user signed in');
+    if (!pinValue || pinValue.length < 4) return false;
+    try {
+      const doc = await db.collection('users').doc(currentUser.uid).get();
+      if (!doc.exists) return false;
+      const data = doc.data();
+      if (!data.pinEnabled || !data.pinHash) return false;
+      const enteredHash = await hashPin(pinValue, currentUser.uid);
+      return enteredHash === data.pinHash;
+    } catch (e) {
+      console.error('verifyPinWithServer error', e);
+      throw e;
+    }
+  }
+
+  continueBtn.addEventListener('click', async () => {
+    setMessage('');
+    const pinValue = (pinInput.value || '').trim();
+    if (!pinValue) { setMessage('Enter your PIN'); return; }
+    if (!currentUser) { setMessage('User not signed in'); return; }
+
+    try {
+      const ok = await verifyPinWithServer(pinValue);
+      if (ok) {
+        // mark unlocked — update lastActivity, clear session flag and compatibility localStorage
+        try {
+          await db.collection('users').doc(currentUser.uid).update({ lastActivity: firebase.firestore.FieldValue.serverTimestamp() }).catch(()=>{});
+        } catch(e){}
+        sessionStorage.removeItem('mj_after_pin');
+        // For inactivity modes keep pinLocked true so lock-check can re-lock after timeout
+        const mode = localStorage.getItem('pinLockMode') || 'immediate';
+        if (mode === 'immediate') {
+          localStorage.setItem('pinLocked', 'false');
+        } else {
+          localStorage.setItem('pinLocked', 'true');
+          localStorage.setItem('pinLastActivity', String(Date.now()));
+        }
+        // Redirect back
+        const prev = sessionStorage.getItem('mj_after_pin') || localStorage.getItem('pinPrevURL');
+        if (prev && prev !== window.location.href) {
+          try { localStorage.removeItem('pinPrevURL'); window.location.href = prev; return; } catch(e){}
+        }
+        // fallback to home
+        window.location.href = 'home';
+      } else {
+        attempts--;
+        setMessage(attempts > 0 ? `Invalid PIN. ${attempts} attempts remaining.` : 'No attempts left — please sign in again.');
+        if (attempts <= 0) {
+          pinInput.disabled = true;
+          // optionally force sign out (safer)
+          setTimeout(() => {
+            try { auth.signOut().catch(()=>{}); } catch(e){}
+            window.location.href = 'index';
+          }, 1200);
+        } else {
+          pinInput.value = '';
+          pinInput.focus();
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage('Error verifying PIN. Check network.');
+    }
+  });
+
+  // Forgot PIN flow
+  forgotBtn.addEventListener('click', (e) => {
+    openModal();
+  });
+  modalCancel.addEventListener('click', () => { closeModal(); });
+
+  function openModal(){
+    passwordInput.value = '';
+    newPin.value = '';
+    confirmPin.value = '';
+    hide(resetSection);
+    hide(resetMsg);
+    hide(pwError);
+    show(modalOverlay);
+    modalOverlay.style.display = 'flex';
+    modalOverlay.setAttribute('aria-hidden','false');
+    passwordInput.focus();
+  }
+  function closeModal(){
+    modalOverlay.style.display = 'none';
+    modalOverlay.setAttribute('aria-hidden','true');
+    hide(modalOverlay);
+  }
+
+  async function reauthenticateCurrentUserWithPassword(password) {
+    if (!currentUser) throw new Error('Not signed in');
+    const providerIds = (currentUser.providerData || []).map(p => p.providerId);
+    try {
+      if (providerIds.includes('password')) {
+        const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
+        await currentUser.reauthenticateWithCredential(cred);
+        return true;
+      } else if (providerIds.includes('google.com')) {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        // popup reauth; may be blocked if not allowed in browser context
+        await currentUser.reauthenticateWithPopup(provider);
+        return true;
+      } else {
+        // fallback to credential if password was supplied
+        if (!password) throw new Error('Password required for reauthentication');
+        const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
+        await currentUser.reauthenticateWithCredential(cred);
+        return true;
+      }
+    } catch (e) {
+      console.error('reauth failed', e);
+      throw e;
+    }
+  }
+
+  modalSubmit.addEventListener('click', async () => {
+    hide(pwError);
+    // If resetSection hidden => attempt reauth
+    if (resetSection.classList.contains('hidden')) {
+      const pw = (passwordInput.value || '').trim();
+      if (!pw) { pwError.textContent = 'Enter your account password'; show(pwError); return; }
+      try {
+        await reauthenticateCurrentUserWithPassword(pw);
+        // show reset inputs
+        show(resetSection);
+        show(resetMsg);
+        passwordInput.value = '';
+        newPin.focus();
+      } catch (e) {
+        pwError.textContent = 'Invalid password or reauth failed';
+        show(pwError);
+      }
+    } else {
+      // set new pin
+      const a = (newPin.value || '').trim();
+      const b = (confirmPin.value || '').trim();
+      if (!a || a.length < 4) { pwError.textContent = 'PIN must be 4–6 digits'; show(pwError); return; }
+      if (a !== b) { pwError.textContent = 'PINs do not match'; show(pwError); return; }
+      if (!/^\d{4,6}$/.test(a)) { pwError.textContent = 'PIN must be numeric 4–6 digits'; show(pwError); return; }
+      try {
+        const pinHash = await hashPin(a, currentUser.uid);
+        if (!pinHash) throw new Error('hash failed');
+        await db.collection('users').doc(currentUser.uid).update({
+          pinHash: pinHash,
+          pinEnabled: true,
+          pinLockMode: 'immediate',
+          pinUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        // unlock and redirect
+        localStorage.setItem('pinLocked','false');
+        sessionStorage.removeItem('mj_after_pin');
+        closeModal();
+        setMessage('');
+        resetMsg.textContent = 'PIN reset. Redirecting...';
+        show(resetMsg);
+        setTimeout(() => {
+          const prev = sessionStorage.getItem('mj_after_pin') || localStorage.getItem('pinPrevURL');
+          if (prev && prev !== window.location.href) { try { localStorage.removeItem('pinPrevURL'); window.location.href = prev; return; } catch(e){} }
+          window.location.href = 'home';
+        }, 600);
+      } catch (err) {
+        console.error(err);
+        pwError.textContent = 'Unable to reset PIN';
+        show(pwError);
+      }
+    }
+  });
+
+  // allow Enter key on input
+  pinInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') continueBtn.click(); });
+  // dismiss modal with Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.style.display === 'flex') closeModal();
+  });
+  </script>
+
+<script src="/pwa-install.js" defer></script>
+</body>
+</html>

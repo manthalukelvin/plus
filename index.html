@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MyJournal+ — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+  <!-- SEO Meta Tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="MyJournal+ - A calm and private journaling app for daily reflection, mood tracking, and personal growth. Free with optional premium features.">
+<meta name="keywords" content="journal, journaling app, mood tracker, personal reflection, diary, mental health, private journaling, productivity">
+<meta name="author" content="Celma Tech Foundation">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+<!-- Canonical URL (IMPORTANT - prevents duplicate content) -->
+<link rel="canonical" href="https://myjournalplus.com">
+
+<!-- Open Graph / Social Media Sharing -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myjournalplus.com">
+<meta property="og:title" content="MyJournal+ — Reflect, Track, Grow">
+<meta property="og:description" content="A calm, private journaling space for daily reflection, mood tracking, and personal growth. Perfect for students and young professionals.">
+<meta property="og:image" content="https://myjournalplus.com/logo.png">
+<meta property="og:site_name" content="MyJournal+">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://myjournalplus.com">
+<meta name="twitter:title" content="MyJournal+ — Private Journaling App">
+<meta name="twitter:description" content="Your personal productivity companion for reflection, mood tracking, and growth.">
+<meta name="twitter:image" content="https://myjournalplus.com/logo.png">
+<meta name="twitter:creator" content="@CelmaTech">
+
+<!-- Mobile App Meta Tags -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MyJournal+">
+<meta name="theme-color" content="#7b6cff">
+
+<!-- PWA Manifest -->
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="shortcut icon" href="logo.png">
+
+<!-- Google Site Verification (if you have it) -->
+<meta name="google-site-verification" content="jb0wFC5mJ_tGoxbxcw6LlrYfwIC7tRzDNaj4ddNo83Q">
+
+
+  <link rel="stylesheet" href="styles.css">
+<meta name="author" content="Kelvin Manthalu — Celma Tech Foundation" />
+  <!-- ===== FAVICON & ICONS ===== -->
+
+<!-- Primary Favicon (SVG - Modern browsers) -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260525" />
+
+<!-- PNG Fallback (96x96 - Good for most uses) -->
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=20260525" />
+
+<!-- Legacy ICO Fallback (Very old browsers) -->
+<link rel="shortcut icon" href="/favicon.ico?v=20260525" />
+
+<!-- Apple iOS Home Screen -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20260525" />
+<meta name="apple-mobile-web-app-title" content="MyJournal+" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!-- PWA Manifest -->
+
+<!-- Theme Color (Browser Address Bar) -->
+<meta name="theme-color" content="#7b6cff" />
+
+
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KT6GJ8Z3');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PCCRP91YV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7PCCRP91YV');
+  </script>
+  <!-- Brevo Conversations {literal} -->
+<script>
+    (function(d, w, c) {
+        w.BrevoConversationsID = '6a16b0cde33c5a214700ba75';
+        w[c] = w[c] || function() {
+            (w[c].q = w[c].q || []).push(arguments);
+        };
+        var s = d.createElement('script');
+        s.async = true;
+        s.src = 'https://conversations-widget.brevo.com/brevo-conversations.js';
+        if (d.head) d.head.appendChild(s);
+    })(document, window, 'BrevoConversations');
+</script>
+<!-- /Brevo Conversations {/literal} -->
+
+<!-- Top download prompt (visible by default, dismiss hides it) -->
+<style>
+  #mj-top-download {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    max-width: 940px;
+    width: calc(100% - 32px);
+    z-index: 11000;
+    border-radius: 12px;
+    padding: 8px 12px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.55);
+    background: linear-gradient(90deg, rgba(123,108,255,0.98), rgba(77,211,255,0.98));
+    color: #041025;
+    font-weight: 700;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    display: flex;
+    opacity: 1;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    transition: opacity 260ms ease, transform 260ms ease;
+  }
+
+  #mj-top-download.mjd-hiding {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px);
+  }
+
+  .left { display:flex; align-items:center; gap:10px; }
+  .label { font-size:14px; font-weight:800; line-height:1; }
+  .sub { font-size:12px; font-weight:600; opacity:0.95; }
+  .actions { display:flex; gap:8px; align-items:center; }
+
+  a.mj-download {
+    background: rgba(255,255,255,0.98);
+    color:#041025;
+    padding:8px 10px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:800;
+    font-size:13px;
+    box-shadow: 0 6px 18px rgba(4,16,37,0.18);
+  }
+  button.mj-dismiss {
+    background: transparent;
+    border: none;
+    color: rgba(4,16,37,0.9);
+    font-weight:700;
+    font-size:16px;
+    padding:6px;
+    cursor:pointer;
+  }
+
+  @media (max-width:520px){
+    .sub { display:none; }
+  }
+</style>
+<script>
+(function(){try{var g=localStorage.getItem('mj_theme_active');if(!g)return;var p=JSON.parse(g);var t=p.theme||'default',b=p.bgStyle||'gradient';
+document.documentElement.dataset.mjTheme=t;document.documentElement.dataset.mjBg=b;
+var css='body.theme-ready{}';
+// apply classes as soon as body exists
+function apply(){var body=document.body;if(!body)return;['theme-midnight','theme-sunset','theme-forest','theme-rose','theme-ocean','theme-aurora','theme-ember','theme-lavender','theme-slate','bg-style-gradient','bg-style-mesh','bg-style-solid','bg-style-waves','bg-style-noir'].forEach(function(c){body.classList.remove(c)});if(t&&t!=='default')body.classList.add('theme-'+t);body.classList.add('bg-style-'+b);}
+if(document.body)apply();else document.addEventListener('DOMContentLoaded',apply);
+}catch(e){}})();
+</script>
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#7b6cff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+
+
+<body class="page-auth">
+
+
+
+<div id="mj-top-download" role="region" aria-label="Download MyJournal+ app">
+  <div class="left" aria-hidden="false">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <path d="M12 3v12" stroke="#041025" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 11l4 4 4-4" stroke="#041025" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="3" y="17" width="18" height="4" rx="1" stroke="#041025" stroke-width="1.4"/>
+    </svg>
+    <div>
+      <div class="label">Get the MyJournal+ app</div>
+      <div class="sub">Download the Android APK for a native experience</div>
+    </div>
+  </div>
+
+  <div class="actions" aria-hidden="false">
+    <a id="mj-download-link" class="mj-download" href="https://apk.e-droid.net/apk/app3925490-pv2y17.apk?v=2" target="_blank" rel="noopener noreferrer" aria-label="Download MyJournal plus APK">Download</a>
+    <button id="mj-download-dismiss" class="mj-dismiss" aria-label="Dismiss download prompt">✕</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const APK_LINK = 'https://apk.e-droid.net/apk/app3925490-pv2y17.apk?v=2';
+  const DISMISS_KEY = 'mj_top_download_dismissed_v1';
+  const bar = document.getElementById('mj-top-download');
+  const link = document.getElementById('mj-download-link');
+  const dismiss = document.getElementById('mj-download-dismiss');
+
+  // If user previously dismissed, hide immediately
+  if (localStorage.getItem(DISMISS_KEY) === '1') {
+    bar.style.display = 'none';
+    return;
+  }
+
+  // Ensure download link
+  if (link) link.href = APK_LINK;
+
+  // Hide + remember function
+  function hideAndRemember() {
+    if (!bar) return;
+    bar.classList.add('mjd-hiding');
+    const cleanup = () => {
+      bar.style.display = 'none';
+      bar.classList.remove('mjd-hiding');
+      bar.removeEventListener('transitionend', cleanup);
+    };
+    bar.addEventListener('transitionend', cleanup, { once: true });
+    setTimeout(cleanup, 420);
+    localStorage.setItem(DISMISS_KEY, '1');
+    bar.setAttribute('aria-hidden', 'true');
+  }
+
+  // Bind dismiss
+  if (dismiss) dismiss.addEventListener('click', hideAndRemember);
+  // Hide when pressing Escape
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideAndRemember(); });
+
+  // Track downloads (optional)
+  if (link) link.addEventListener('click', () => {
+    try { if (window.gtag) gtag('event', 'download_apk', { method: 'banner' }); } catch (e) {}
+  });
+})();
+</script>
+
+
+  <!-- Splash Screen -->
+ 
+  <div id="splash-screen" class="splash-screen hidden" aria-hidden="true">
+    <div class="splash-logo">📔</div>
+    <h1 class="splash-text">MyJournal+</h1>
+    <div class="splash-bar">
+      <div class="splash-bar-fill"></div>
+    </div>
+    <p class="splash-subtitle">Your private space for reflection</p>
+  </div>
+
+  <main class="auth-container glass" role="main" aria-labelledby="logo-title">
+    <header class="logo-block">
+      <img src="logo.png" alt="MyJournal+ logo" class="site-logo" />
+      <h1 id="logo-title" class="logo-title">MyJournal+</h1>
+      <p class="site-desc">Securely capture your thoughts, track your plans, and reflect on your mood—protected by login and available across devices</p>
+    </header>
+
+    <form id="login-form" class="auth-form" aria-label="Sign in form">
+      <label class="input-label">Email</label>
+      <input id="login-email" type="email" required placeholder="you@example.com" />
+      <label class="input-label">Password</label>
+      <div class="password-row">
+        <input id="login-password" type="password" required placeholder="••••••••" />
+        <button type="button" id="login-showpass" class="show-pass">Show</button>
+      </div>
+
+      <label style="display:flex; gap:8px; align-items:center; margin-top:12px; color:var(--muted); font-size:13px;">
+        <input id="remember-login" type="checkbox" style="width:auto;" />
+        <span>Remember me on this device</span>
+      </label>
+
+      <button id="login-btn" class="btn primary" type="submit"
+  style="margin-top:12px; width:100%; display:flex; justify-content:center; align-items:center; text-align:center;">
+  Sign in
+</button> </form>
+
+    <div class="oauth-divider">Or continue with</div>
+
+    <div id="google-signin-button" 
+     style="display:flex; justify-content:center; align-items:center; text-align:center;">
+</div>
+
+    <div class="auth-links" style="justify-content:space-between; margin-top:12px;">
+      <div><a id="forgot-link" href="#" class="link">Forgot password?</a></div>
+      <div>Don't have an account? <a id="signup-link" href="signup" class="link" style="color:var(--accent-2);">Sign up</a></div>
+    </div>
+
+    <footer style="width:95%;display:inline;justify-content:space-between;text-align:center;align-items:center;margin-top:10px">
+      <div><a href="about" class="tiny-link">About</a> · <a href="terms" class="tiny-link">Terms</a> · <a href="privacy" class="tiny-link">Privacy</a> </br> <a href="https://www.appcreator24.com/app3925490-pv2y17">Download Android App </a> </div> 
+      <div class="app-footer">Celma - 2026</div>
+    </footer>
+  </main>
+
+  <!-- Forgot password modal -->
+  <div id="reset-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card small glassreset">
+      <h3>Reset password</h3>
+      <p>Enter your email to receive a reset link</p>
+      <input id="reset-email" type="email" placeholder="you@example.com" />
+      <div class="modal-actions">
+        <button id="reset-send" class="btn primary">Send reset link</button>
+        <button id="reset-close" class="btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KT6GJ8Z3"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+  <!-- scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+
+  <script src="main.js"></script>
+<script src="referral-signup-helper.js"></script>
+<script src="pwa-install.js"></script>
+
+</body>
+</html>

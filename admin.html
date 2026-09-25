@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyJournal+ | Growth Admin</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="header glass">
+    <div class="logo logo-admin">MyJournal+ Growth Admin</div>
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <span class="text-muted text-xs" id="userName"></span>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn">Sign Out</button>
+    </div>
+  </header>
+  <div id="msgBar" class="msg-bar hidden"><span id="msgText"></span><button onclick="hideMsg()" style="background:none;border:none;color:inherit;cursor:pointer">✕</button></div>
+
+  <div class="layout">
+    <nav class="sidebar">
+      <button class="nav-btn active" data-tab="overview">Overview</button>
+      <button class="nav-btn" data-tab="specialists">Specialists</button>
+      <button class="nav-btn" data-tab="pipeline">Referral pipeline</button>
+      <button class="nav-btn" data-tab="payouts">Payouts</button>
+      <button class="nav-btn" data-tab="thresholds">Thresholds</button>
+      <button class="nav-btn" data-tab="consult">Consultations</button>
+      <button class="nav-btn" data-tab="fraud">Fraud</button>
+      <button class="nav-btn" data-tab="resources">Resources</button>
+      <button class="nav-btn" data-tab="users">Promote users</button>
+    </nav>
+
+    <main class="main">
+      <!-- OVERVIEW -->
+      <div id="tab-overview" class="tab-content space-y">
+        <div class="grid-4">
+          <div class="glass-card kpi"><div class="kpi-label">Specialists</div><div class="kpi-value" id="ovSpecialists">0</div></div>
+          <div class="glass-card kpi"><div class="kpi-label">Total referrals</div><div class="kpi-value" id="ovRefs">0</div></div>
+          <div class="glass-card kpi"><div class="kpi-label">Retained (7d)</div><div class="kpi-value text-emerald" id="ovRetained">0</div></div>
+          <div class="glass-card kpi"><div class="kpi-label">Premium</div><div class="kpi-value text-gold" id="ovPremium">0</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="glass-card p-5">
+            <h3 class="section-title">Commission model</h3>
+            <p class="text-muted text-xs">$2 for every 50 qualified users retained 7 days · $5 for every 15 verified Premium</p>
+            <div class="mt-3 grid-2">
+              <div><div class="text-xs text-muted">Pending payouts</div><div class="kpi-value text-amber" style="font-size:1.2rem" id="ovPending">$0</div></div>
+              <div><div class="text-xs text-muted">Paid total</div><div class="kpi-value text-emerald" style="font-size:1.2rem" id="ovPaid">$0</div></div>
+            </div>
+          </div>
+          <div class="glass-card p-5">
+            <h3 class="section-title">Quick actions</h3>
+            <button class="btn btn-admin btn-sm mb-2" id="scanBtn" style="width:100%">Run fraud scan</button>
+            <button class="btn btn-ghost btn-sm" id="syncThresholdsBtn" style="width:100%">Sync threshold commissions</button>
+            <p class="text-xs text-muted mt-2">Sync creates pending commissions when specialists hit 50-retained or 15-premium batches.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPECIALISTS -->
+      <div id="tab-specialists" class="tab-content space-y">
+        <div class="flex-between">
+          <h2 class="section-title" style="margin:0">Growth specialists (<span id="specCount">0</span>)</h2>
+          <input type="text" id="searchSpec" placeholder="Search name or code…" style="max-width:14rem" />
+        </div>
+        <div id="specialistsList"></div>
+      </div>
+
+      <!-- PIPELINE -->
+      <div id="tab-pipeline" class="tab-content hidden">
+        <div class="glass-card p-5">
+          <h2 class="section-title">All referrals (live)</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Specialist</th><th>User</th><th>Status</th><th>Days</th><th>Premium</th><th>Date</th><th></th></tr></thead>
+              <tbody id="pipelineBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYOUTS -->
+      <div id="tab-payouts" class="tab-content hidden">
+        <div class="glass-card p-5">
+          <h2 class="section-title">Commissions &amp; payouts</h2>
+          <div id="payoutsList"></div>
+        </div>
+      </div>
+
+      <!-- THRESHOLDS -->
+      <div id="tab-thresholds" class="tab-content hidden space-y">
+        <div class="glass-card p-5">
+          <h2 class="section-title">Progress to payout</h2>
+          <p class="text-muted text-xs mb-4">Full link progress until thresholds are reached and payable.</p>
+          <div id="thresholdsList"></div>
+        </div>
+      </div>
+
+      <!-- CONSULT -->
+      <div id="tab-consult" class="tab-content hidden space-y">
+        <h2 class="section-title">Specialist consultations</h2>
+        <div class="grid-2">
+          <div class="glass-card p-4">
+            <h3 class="text-xs text-muted mb-2">Threads</h3>
+            <div id="consultSpecialists"></div>
+          </div>
+          <div class="consult-box">
+            <h3 class="section-title" id="consultTitle">Select a specialist</h3>
+            <div class="consult-thread" id="adminConsultThread"></div>
+            <div style="display:flex;gap:.5rem" id="consultReplyWrap" class="hidden">
+              <input type="text" id="adminConsultInput" placeholder="Reply…" style="flex:1" />
+              <button class="btn btn-sky btn-sm" id="adminConsultSend">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FRAUD -->
+      <div id="tab-fraud" class="tab-content hidden space-y">
+        <div class="flex-between">
+          <h2 class="section-title" style="margin:0">Fraud detection</h2>
+          <button class="btn btn-admin btn-sm" id="scanBtn2">Run full scan</button>
+        </div>
+        <div id="fraudList"></div>
+      </div>
+
+      <!-- RESOURCES -->
+      <div id="tab-resources" class="tab-content hidden space-y">
+        <h2 class="section-title">Marketing resources</h2>
+        <div class="glass-card p-4 space-y">
+          <input type="text" id="resTitle" placeholder="Title" />
+          <input type="text" id="resDesc" placeholder="Description" />
+          <input type="url" id="resUrl" placeholder="URL" />
+          <button class="btn btn-primary btn-sm" id="addResBtn">Add resource</button>
+        </div>
+        <div id="adminResList"></div>
+      </div>
+
+      <!-- USERS -->
+      <div id="tab-users" class="tab-content hidden">
+        <div class="glass-card p-5">
+          <h2 class="section-title">Promote to Growth Specialist</h2>
+          <div id="usersList"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Edit modal -->
+  <div id="editModal" class="modal-overlay hidden">
+    <div class="glass-strong modal">
+      <h3 id="editTitle">Edit specialist</h3>
+      <div class="form-group"><label>Display name</label><input id="editName" /><button class="btn btn-ghost btn-sm mt-2" id="saveNameBtn">Save name</button></div>
+      <div class="form-group"><label>Acquisition code (referral)</label><input id="editCode" class="font-mono" /><button class="btn btn-ghost btn-sm mt-2" id="saveCodeBtn">Save code</button></div>
+      <div class="form-group"><label>Signup base URL (optional)</label><input id="editBase" placeholder="https://myjournalplus.com/signup" /><button class="btn btn-ghost btn-sm mt-2" id="saveBaseBtn">Save URL</button></div>
+      <div class="form-group"><label>Notes (internal)</label><textarea id="editNotes" rows="2"></textarea><button class="btn btn-ghost btn-sm mt-2" id="saveNotesBtn">Save notes</button></div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:.5rem" id="closeModalBtn">Close</button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

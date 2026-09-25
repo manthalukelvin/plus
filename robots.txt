@@ -1,0 +1,76 @@
+# MyJournal+ robots.txt
+# Last updated: 2026-05-23
+
+# Allow all bots to crawl public pages
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /privacy
+Allow: /terms
+Allow: /login
+Allow: /signup
+Allow: /404
+Allow: /confirm
+Allow: /tnmmpamba
+
+# Disallow crawling of authenticated/protected pages
+Disallow: /home
+Disallow: /edit
+Disallow: /preview
+Disallow: /mood
+Disallow: /ai-insights
+Disallow: /settings
+Disallow: /pin
+
+# Disallow admin and system directories
+Disallow: /admin/
+Disallow: /api/
+Disallow: /.git/
+Disallow: /.env
+Disallow: /node_modules/
+Disallow: /config/
+
+# Disallow sensitive pages
+Disallow: /firebase-messaging-sw.js
+Disallow: /ad-manager.js
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /search?
+Disallow: /temp/
+
+# Allow specific bot access for SEO
+User-agent: Googlebot
+Allow: /
+Allow: /about
+Allow: /privacy
+Allow: /terms
+
+User-agent: Bingbot
+Allow: /
+Allow: /about
+Allow: /privacy
+Allow: /terms
+
+User-agent: Slurp
+Allow: /
+
+# Slow down aggressive bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Block bad bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AltaVista
+Disallow: /
+
+# Sitemap location
+Sitemap: https://myjournalplus.com/sitemap.xml
+
+# Cache control
+# Standard crawl delay for all bots (optional)
+Crawl-delay: 1

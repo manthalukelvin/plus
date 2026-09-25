@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MyJournal+ — Preview Entry</title>
+  <!-- ===== FAVICON & ICONS ===== -->
+
+<!-- Primary Favicon (SVG - Modern browsers) -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260525" />
+
+<!-- PNG Fallback (96x96 - Good for most uses) -->
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=20260525" />
+
+<!-- Legacy ICO Fallback (Very old browsers) -->
+<link rel="shortcut icon" href="/favicon.ico?v=20260525" />
+
+<!-- Apple iOS Home Screen -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20260525" />
+<meta name="apple-mobile-web-app-title" content="MyJournal+" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!-- PWA Manifest -->
+
+<!-- Theme Color (Browser Address Bar) -->
+<meta name="theme-color" content="#7b6cff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PCCRP91YV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7PCCRP91YV');
+  </script>
+
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KT6GJ8Z3');</script>
+<!-- End Google Tag Manager -->
+
+  <script src="/lock-check.js" defer></script>
+<script>
+(function(){try{var g=localStorage.getItem('mj_theme_active');if(!g)return;var p=JSON.parse(g);var t=p.theme||'default',b=p.bgStyle||'gradient';
+document.documentElement.dataset.mjTheme=t;document.documentElement.dataset.mjBg=b;
+var css='body.theme-ready{}';
+// apply classes as soon as body exists
+function apply(){var body=document.body;if(!body)return;['theme-midnight','theme-sunset','theme-forest','theme-rose','theme-ocean','theme-aurora','theme-ember','theme-lavender','theme-slate','bg-style-gradient','bg-style-mesh','bg-style-solid','bg-style-waves','bg-style-noir'].forEach(function(c){body.classList.remove(c)});if(t&&t!=='default')body.classList.add('theme-'+t);body.classList.add('bg-style-'+b);}
+if(document.body)apply();else document.addEventListener('DOMContentLoaded',apply);
+}catch(e){}})();
+</script>
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#7b6cff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+  <header class="app-header glass">
+    <div class="header-left">
+      <h1 class="logo-title small">MyJournal+</h1>
+      <p class="site-desc small">Preview your entry</p>
+    </div>
+    <div class="header-right">
+      <a id="edit-link" class="btn">Edit</a>
+      <a href="home" class="btn">Back</a>
+    </div>
+  </header>
+
+  <main class="editor-page glass">
+    <h2 id="preview-title"></h2>
+    <div id="preview-content" class="preview-content"></div>
+    <p class="entry-meta" id="preview-meta"></p>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="theme-toggle" class="btn small" title="Themes">Apply 🎨 Themes</button>
+        <div id="theme-palette" style="display:none;gap:8px;flex-wrap:wrap;justify-content:flex-start;padding:12px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04)"></div>
+      </div>
+      <button id="delete-entry" class="btn danger">Delete</button>
+    </div>
+
+   
+  </main>
+
+  <footer style="width:95%;display:inline;justify-content:space-between;text-align:center;align-items:center;margin-top:10px">
+    <div><a href="about" class="tiny-link">About</a> · <a href="terms" class="tiny-link">Terms &amp; Conditions</a> </br> <a href="https://www.appcreator24.com/app3925490-pv2y17"> Download Android App </a> </div>
+    <div class="app-footer">Celma - 2026</div>
+  </footer>
+
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KT6GJ8Z3"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+  <script src="main.js"></script>
+<script src="https://pl29175184.effectivecpmnetwork.com/a6/14/1e/a6141eb3dffeaecc45fd7a33a6e07717.js"></script>
+
+
+<script src="/pwa-install.js" defer></script>
+</body>
+</html>
