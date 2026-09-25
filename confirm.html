@@ -3275,7 +3275,7 @@ Thank you!
       return;
     }
     try {
-      const res = await fetch('/api/payments/create-paychangu', {
+      const res = await fetch('https://myjournalplus.freedev.app/api/payments/create-paychangu', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -3307,7 +3307,7 @@ Thank you!
       const token = await getIdToken();
       if (!token) return;
       try {
-        const res = await fetch('/api/payments/verify-paychangu', {
+        const res = await fetch('https://myjournalplus.freedev.app/api/payments/verify-paychangu', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
