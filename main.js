@@ -13,12 +13,12 @@ const firebaseConfig = {
 };
 const API_BASE = "https://myjournalplus.freedev.app/api";
 
-const BACKEND_PAYPAL_CREATE_URL = "/api/payments/paypal-create-order";
-const BACKEND_PAYPAL_CAPTURE_URL = "/api/payments/paypal-capture";
-const BACKEND_PAYCHANGU_CREATE_URL = "/api/payments/create-paychangu";
-const BACKEND_PAYCHANGU_VERIFY_URL = "/api/payments/verify-paychangu";
-const BACKEND_PAYMENT_STATUS_URL = "/api/payments/status";
-const BACKEND_AI_INSIGHTS_URL = "https://your-backend.example.com/api/ai-insights";
+const BACKEND_PAYPAL_CREATE_URL = API_BASE + "/payments/paypal-create-order";
+const BACKEND_PAYPAL_CAPTURE_URL = API_BASE + "/payments/paypal-capture";
+const BACKEND_PAYCHANGU_CREATE_URL = API_BASE + "/payments/create-paychangu";
+const BACKEND_PAYCHANGU_VERIFY_URL = API_BASE + "/payments/verify-paychangu";
+const BACKEND_PAYMENT_STATUS_URL = API_BASE + "/payments/status";
+const BACKEND_AI_INSIGHTS_URL = API_BASE + "/ai-chat";
 const VAPID_KEY = "BLH2E5pI_45jlSWs9nJMIE1IfwLcQwxuKGXL4n7ZAhLR9OI30EjWhcO66weIzZgrLlIpzkmq0c-pwyJ_JO4eMw8";
 
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
@@ -293,8 +293,9 @@ function ensurePremiumModal() {
     const u = auth.currentUser;
     if (!u) { showDialog('Please sign in to purchase'); return; }
     try {
-      openManualVerifyModal();
-    } catch (e) { console.error(e); showError('Payment initiation failed'); }
+      // Go to confirm page where user picks plan and pays via PayPal or PayChangu
+      window.location.href = 'confirm.html';
+    } catch (e) { console.error(e); showError('Could not open payment page'); }
   });
 }
 

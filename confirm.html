@@ -2033,7 +2033,7 @@
     </div>
 
 
-   <button id="mj-pay-paypal" class="btn primary">PayPal</button>
+   <button id="mj-pay-paypal" class="btn primary" type="button" onclick="startPayPalPayment()">Pay with PayPal</button>
 
   </div>
 
@@ -3254,6 +3254,90 @@ Thank you!
   }
 
   // Start PayChangu payment
+  
+  // Start PayPal payment for selected plan
+  window.startPayPalPayment = async function() {
+    const plan = (document.getElementById('selected-plan') || {}).value || 'lifetime';
+    const token = await getIdToken();
+    if (!token) {
+      alert('Please sign in first to upgrade.');
+      window.location.href = 'login.html';
+      return;
+    }
+    try {
+      const res = await fetch('https://myjournalplus.freedev.app/api/payments/paypal-create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ plan })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.orderId) {
+        alert(data.error || 'Could not start PayPal payment. Check API and keys.');
+        console.error(data);
+        return;
+      }
+      sessionStorage.setItem('mj_paypal_order', data.orderId);
+      sessionStorage.setItem('mj_pending_plan', plan);
+      // Load PayPal JS SDK and render buttons, or redirect via approval link if returned
+      if (data.approveUrl) {
+        window.location.href = data.approveUrl;
+        return;
+      }
+      // Fallback: show message and use capture after approval via SDK
+      alert('PayPal order created: ' + data.orderId + '. Loading PayPal...');
+      loadPayPalButtons(data.orderId);
+    } catch (e) {
+      console.error(e);
+      alert('Network error talking to payment server. Is the API online?');
+    }
+  };
+
+  function loadPayPalButtons(orderId) {
+    if (window.paypal) {
+      renderPayPal(orderId);
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = 'https://www.paypal.com/sdk/js?client-id=AaHclfYuOztCsBadS2BJr_II0OCnj5KmzFj2uedvKMh6_W_WUxYLiKo35aq2Cry7EXuTnh3PRBbvUf8h&currency=USD';
+    s.onload = () => renderPayPal(orderId);
+    document.head.appendChild(s);
+  }
+
+  function renderPayPal(orderId) {
+    let container = document.getElementById('paypal-button-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'paypal-button-container';
+      container.style.cssText = 'margin:16px auto;max-width:400px;';
+      document.querySelector('.payment-method.paypal-method')?.appendChild(container)
+        || document.querySelector('main')?.appendChild(container);
+    }
+    container.innerHTML = '';
+    paypal.Buttons({
+      createOrder: () => orderId,
+      onApprove: async (data) => {
+        const token = await getIdToken();
+        const res = await fetch('https://myjournalplus.freedev.app/api/payments/paypal-capture', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ orderId: data.orderID || orderId })
+        });
+        const result = await res.json();
+        if (result.success) {
+          alert('Premium activated! Enjoy MyJournal+ Premium.');
+          window.location.href = 'home.html';
+        } else {
+          alert(result.error || result.message || 'Capture failed');
+        }
+      },
+      onCancel: () => alert('Payment cancelled'),
+      onError: (err) => { console.error(err); alert('PayPal error'); }
+    }).render('#paypal-button-container');
+  }
+
   window.startPayChanguPayment = async function() {
     const plan = (document.getElementById('selected-plan') || {}).value || 'lifetime';
     const token = await getIdToken();
