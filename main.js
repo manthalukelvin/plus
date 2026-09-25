@@ -11,6 +11,7 @@ const firebaseConfig = {
   appId: "1:288260274583:web:9c40aafed9ab9fa30e6cd2",
   measurementId: "G-MXJ84MJGTR"
 };
+const API_BASE = "https://myjournalplus.freedev.app/api";
 
 const BACKEND_PAYPAL_CREATE_URL = "/api/payments/paypal-create-order";
 const BACKEND_PAYPAL_CAPTURE_URL = "/api/payments/paypal-capture";
