@@ -2,7 +2,7 @@
 // Premium-gated. Uses secure backend when BACKEND_AI_INSIGHTS_URL is set;
 // otherwise optional client Gemini key (localStorage mj_gemini_key or LOCAL_AI_API_KEY).
 
-const BACKEND_AI_INSIGHTS_URL = window.BACKEND_AI_INSIGHTS_URL || "/api/ai-chat";
+const BACKEND_AI_INSIGHTS_URL = window.BACKEND_AI_INSIGHTS_URL || "https://myjournalplus.freedev.app/api/ai-chat";
 const LOCAL_AI_API_KEY = window.LOCAL_AI_API_KEY
   || (typeof localStorage !== 'undefined' ? (localStorage.getItem('mj_gemini_key') || '') : '')
   || "";  // never ship a real key in frontend
